@@ -20,8 +20,10 @@ The Flash API Documentation is automatically built and deployed to DigitalOcean 
 
 To use this deployment pipeline, you need to set up the following secrets in your GitHub repository:
 
-- `DIGITALOCEAN_ACCESS_TOKEN`: A DigitalOcean API token with write permissions
+- `DIGITALOCEAN_ACCESS_TOKEN`: A DigitalOcean API token with **both read and write permissions**
 - `DIGITALOCEAN_APP_ID`: The ID of your DigitalOcean App Platform application
+
+For detailed instructions on setting up these secrets correctly, see [DIGITALOCEAN_SETUP.md](DIGITALOCEAN_SETUP.md).
 
 ## Setting Up DigitalOcean App Platform
 

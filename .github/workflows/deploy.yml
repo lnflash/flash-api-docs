@@ -55,15 +55,46 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      
+
+      - name: Verify DigitalOcean Permissions
+        run: |
+          echo "Checking DigitalOcean access..."
+          doctl account get || {
+            echo "::error::Failed to access DigitalOcean account. Please check your DIGITALOCEAN_ACCESS_TOKEN secret."
+            echo "The token needs to have both read and write access to apps."
+            echo "You can create a new token at https://cloud.digitalocean.com/account/api/tokens"
+            exit 1
+          }
+
+          echo "Checking App Platform access..."
+          # Just list apps to verify app platform access
+          doctl apps list || {
+            echo "::error::Failed to access DigitalOcean App Platform. Please check your token has the apps scope."
+            exit 1
+          }
+
       - name: Deploy to DigitalOcean App Platform
         run: |
           # Create tar of the public directory
           tar -czf deploy.tar.gz -C public .
-          
+
+          # Verify that the APP_ID is set
+          if [ -z "${{ secrets.DIGITALOCEAN_APP_ID }}" ]; then
+            echo "::error::DIGITALOCEAN_APP_ID is not set. Please add this secret in your repository settings."
+            exit 1
+          fi
+
           # Deploy to DigitalOcean App Platform
-          # Replace APP_ID with your actual DigitalOcean App ID
-          doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }} --wait --format ID
+          echo "Deploying to DigitalOcean App Platform (App ID: ${{ secrets.DIGITALOCEAN_APP_ID }})..."
+
+          # Try the deployment with more verbose output
+          doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }} --wait --format ID --verbose || {
+            echo "::error::Failed to deploy to DigitalOcean App Platform. Please check:"
+            echo "1. Your DIGITALOCEAN_APP_ID is correct"
+            echo "2. Your token has write permissions to this specific app"
+            echo "3. Your token is still valid"
+            exit 1
+          }
 
       - name: Deployment Summary
         run: |
