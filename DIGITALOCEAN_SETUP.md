@@ -19,6 +19,8 @@ This guide explains how to set up DigitalOcean App Platform and the necessary to
    - After creating your app, the App ID is visible in the URL when viewing your app
    - Example URL: `https://cloud.digitalocean.com/apps/12345a67-b890-1234-5c67-8901d23e45fg`
    - In this example, the App ID is `12345a67-b890-1234-5c67-8901d23e45fg`
+   - **Important**: The App ID must be a valid UUID in the format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+   - If you're seeing an "invalid uuid" error, check that you've copied the complete ID including all hyphens
 
 ## Creating a Proper DigitalOcean Access Token
 
@@ -51,6 +53,32 @@ This guide explains how to set up DigitalOcean App Platform and the necessary to
    - Click "Add secret"
 
 ## Troubleshooting Deployment Issues
+
+### Invalid UUID Error
+
+If you're seeing an "invalid uuid" error:
+
+1. **Check App ID Format**:
+   - The App ID must be in the format `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+   - Make sure you've copied the entire UUID from the URL
+   - Ensure all hyphens are included
+   - The ID should be a 36-character string (including hyphens)
+
+2. **How to Find the Correct App ID**:
+   - Go to [DigitalOcean App Platform Dashboard](https://cloud.digitalocean.com/apps)
+   - Click on your app in the list
+   - Look at the URL in your browser address bar
+   - The App ID is the part after `/apps/`
+   - Example: in `https://cloud.digitalocean.com/apps/12345a67-b890-1234-5c67-8901d23e45fg`, the ID is `12345a67-b890-1234-5c67-8901d23e45fg`
+
+3. **Verify with CLI**:
+   - You can also list all your apps with the DigitalOcean CLI:
+   ```bash
+   doctl apps list --format ID,Spec.Name
+   ```
+   - This will show all your app IDs and names
+
+### Authorization Error
 
 If you're seeing a "403 You are not authorized" error:
 

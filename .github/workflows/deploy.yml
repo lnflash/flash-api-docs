@@ -84,15 +84,33 @@ jobs:
             exit 1
           fi
 
+          # Check App ID format (UUID validation)
+          APP_ID="${{ secrets.DIGITALOCEAN_APP_ID }}"
+          if ! [[ $APP_ID =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
+            echo "::error::Invalid App ID format. The App ID should be a valid UUID in the format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            echo "Please check DIGITALOCEAN_SETUP.md for instructions on finding your correct App ID."
+            exit 1
+          fi
+
+          # List available apps to help debugging
+          echo "Available DigitalOcean apps:"
+          doctl apps list --format ID,Spec.Name,DefaultIngress --no-header
+
           # Deploy to DigitalOcean App Platform
-          echo "Deploying to DigitalOcean App Platform (App ID: ${{ secrets.DIGITALOCEAN_APP_ID }})..."
+          echo "Deploying to DigitalOcean App Platform (App ID: $APP_ID)..."
 
           # Try the deployment with more verbose output
-          doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }} --wait --format ID --verbose || {
-            echo "::error::Failed to deploy to DigitalOcean App Platform. Please check:"
-            echo "1. Your DIGITALOCEAN_APP_ID is correct"
-            echo "2. Your token has write permissions to this specific app"
-            echo "3. Your token is still valid"
+          doctl apps create-deployment "$APP_ID" --wait --format ID --verbose || {
+            echo "::error::Failed to deploy to DigitalOcean App Platform."
+            echo "Error: invalid uuid suggests the App ID is not correctly formatted."
+            echo ""
+            echo "To find your correct App ID:"
+            echo "1. Go to https://cloud.digitalocean.com/apps"
+            echo "2. Click on your app"
+            echo "3. The App ID is in the URL: https://cloud.digitalocean.com/apps/YOUR-APP-ID-HERE"
+            echo "4. It should look like: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            echo ""
+            echo "Update your DIGITALOCEAN_APP_ID secret with this value."
             exit 1
           }
 
