@@ -285,7 +285,7 @@
         </li>
         <li>
           <h3>Obtain API Credentials</h3>
-          <p>Authenticate with Flash by entering the 6-digit code sent to your registered phone number via SMS. This one-time code will generate an authentication token for API access.</p>
+          <p>Authentication requires a two-step process: first trigger a verification code to be sent to the user's phone with <code>userPhoneRegistrationInitiate</code>, then submit the code with <code>userLogin</code> to receive an authentication token. See the Authentication section below for detailed examples.</p>
         </li>
         <li>
           <h3>Set Up Your Environment</h3>
@@ -342,10 +342,35 @@ fetchAccount();</pre>
       </div>
 
       <h3>Authentication Process</h3>
+      <p>Flash uses a two-step phone verification process for authentication:</p>
       <ol>
         <li>
-          <strong>Request an auth token</strong> by sending a login mutation with your credentials:
-          <div class="code-examples" data-operation="authentication"></div>
+          <strong>Step 1: Initiate phone verification</strong> by sending a <code>userPhoneRegistrationInitiate</code> mutation with the phone number:
+          <div class="code-sample" data-language="graphql">
+            <pre>mutation {
+  userPhoneRegistrationInitiate(input: { phone: "+1234567890" }) {
+    success
+    errors {
+      message
+    }
+  }
+}</pre>
+          </div>
+          <p>This will trigger a 6-digit code to be sent via SMS to the specified phone number.</p>
+        </li>
+        <li>
+          <strong>Step 2: Verify the code and obtain auth token</strong> by sending a <code>userLogin</code> mutation with the phone number and verification code:
+          <div class="code-sample" data-language="graphql">
+            <pre>mutation {
+  userLogin(input: { phone: "+1234567890", code: "123456" }) {
+    authToken
+    errors {
+      message
+    }
+  }
+}</pre>
+          </div>
+          <p>Upon successful verification, an authentication token will be returned.</p>
         </li>
         <li>
           <strong>Store the auth token</strong> securely in your application.
@@ -362,7 +387,7 @@ fetchAccount();</pre>
           <div class="code-sample" data-language="javascript">
             <pre>// Check for authentication errors
 if (error.message === 'Unauthorized' || error.message === 'Token expired') {
-  // Redirect to login or refresh token
+  // Repeat the authentication process to get a new token
 }
 </pre>
           </div>
