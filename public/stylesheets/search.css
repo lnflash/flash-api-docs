@@ -1,0 +1,114 @@
+/* Search styles for the API documentation */
+
+.search-container {
+  position: relative;
+  margin: 15px 0;
+  padding: 0 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+#api-search-input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border: 2px solid var(--primary-color);
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#api-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(22, 85, 192, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  font-size: 16px;
+}
+
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 15px;
+  right: 15px;
+  z-index: 1000;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  display: none;
+}
+
+.search-result-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-result-item:hover {
+  background-color: #f5f5f5;
+}
+
+.search-result-title {
+  flex: 1;
+  font-size: 14px;
+}
+
+.search-result-badge {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.search-result-badge.h1,
+.search-result-badge.h2 {
+  background-color: #1655c0;
+  color: white;
+}
+
+.search-result-badge.h3,
+.search-result-badge.h4 {
+  background-color: #5c8fd6;
+  color: white;
+}
+
+.search-result-badge.h5,
+.search-result-badge.h6,
+.search-result-badge.description {
+  background-color: #a8c3ec;
+  color: #333;
+}
+
+.search-no-results {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.search-highlight {
+  animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(22, 85, 192, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}

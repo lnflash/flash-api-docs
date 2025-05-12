@@ -1,0 +1,382 @@
+/* Dark Mode Styles for Flash API Documentation */
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --color-primary: #3c7be8;
+  --color-primary-light: #5c8fd6;
+  --color-primary-dark: #1655c0;
+  --color-secondary: #f5f5f5;
+  --text-color: #e0e0e0;
+  --text-color-muted: #999999;
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --surface-color-hover: #252525;
+  --border-color: #333333;
+  --code-bg: #202020;
+  --code-color: #e0e0e0;
+  --heading-color: #ffffff;
+  --link-color: #3c7be8;
+  --link-color-hover: #5c8fd6;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --badge-bg: #3c7be8;
+  --badge-color: #ffffff;
+  --tooltip-bg: #333333;
+  --tooltip-color: #e0e0e0;
+  --line-highlight-bg: rgba(60, 123, 232, 0.1);
+  --scrollbar-thumb: #444444;
+  --scrollbar-track: #222222;
+  --alert-bg: #2d333b;
+  --alert-color: #e0e0e0;
+  --alert-border: #1b4a6e;
+  --info-bg: #1b2a38;
+  --info-color: #e0e0e0;
+  --info-border: #1b4a6e;
+  --warning-bg: #332a1b;
+  --warning-color: #e0e0e0;
+  --warning-border: #6e4e1b;
+  --error-bg: #3b1c1c;
+  --error-color: #e0e0e0;
+  --error-border: #6e1b1b;
+  --success-bg: #1b3323;
+  --success-color: #e0e0e0;
+  --success-border: #1b6e2d;
+}
+
+/* Base theme adjustments */
+[data-theme="dark"] body, 
+[data-theme="dark"] #spectaql {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Header and sidebar */
+[data-theme="dark"] header {
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .sidebar {
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] #spectaql #sidebar {
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .sidebar h2,
+[data-theme="dark"] #spectaql #sidebar h4 {
+  color: var(--heading-color);
+}
+
+[data-theme="dark"] .sidebar a,
+[data-theme="dark"] #spectaql #sidebar a {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .sidebar a:hover,
+[data-theme="dark"] #spectaql #sidebar a:hover,
+[data-theme="dark"] #spectaql #sidebar a.nav-scroll-active {
+  color: var(--link-color);
+}
+
+/* Content styling */
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6,
+[data-theme="dark"] #spectaql h1, 
+[data-theme="dark"] #spectaql h2, 
+[data-theme="dark"] #spectaql h3, 
+[data-theme="dark"] #spectaql h4, 
+[data-theme="dark"] #spectaql h5, 
+[data-theme="dark"] #spectaql h6 {
+  color: var(--heading-color);
+}
+
+[data-theme="dark"] a,
+[data-theme="dark"] .content a {
+  color: var(--link-color);
+}
+
+[data-theme="dark"] a:hover,
+[data-theme="dark"] .content a:hover {
+  color: var(--link-color-hover);
+}
+
+/* Code blocks */
+[data-theme="dark"] .code-sample,
+[data-theme="dark"] .code-examples .code-sample,
+[data-theme="dark"] pre[class*="language-"] {
+  background-color: var(--code-bg);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] code[class*="language-"],
+[data-theme="dark"] pre[class*="language-"] {
+  color: var(--code-color);
+}
+
+[data-theme="dark"] .code-sample .copy-button {
+  background-color: var(--badge-bg);
+  color: var(--badge-color);
+}
+
+[data-theme="dark"] .code-language-badge {
+  background-color: var(--badge-bg);
+}
+
+/* Code tabs */
+[data-theme="dark"] .code-tabs-header {
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .code-tab-btn,
+[data-theme="dark"] .code-tab-trigger {
+  color: var(--text-color-muted);
+}
+
+[data-theme="dark"] .code-tab-btn.active,
+[data-theme="dark"] .code-tab-trigger.active {
+  color: var(--link-color);
+  border-bottom-color: var(--link-color);
+}
+
+/* Tables */
+[data-theme="dark"] #spectaql table {
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] #spectaql table th {
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] #spectaql table td {
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Search */
+[data-theme="dark"] #api-search-input {
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] #search-results {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .search-result-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .search-result-item:hover {
+  background-color: var(--surface-color-hover);
+}
+
+[data-theme="dark"] .search-highlight {
+  background-color: rgba(60, 123, 232, 0.2);
+}
+
+/* Mobile specific */
+[data-theme="dark"] .mobile-nav {
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .hamburger-icon, 
+[data-theme="dark"] .hamburger-icon:before, 
+[data-theme="dark"] .hamburger-icon:after {
+  background-color: var(--text-color);
+}
+
+[data-theme="dark"] .mobile-section-header {
+  background-color: var(--surface-color);
+}
+
+/* Scrollbars for WebKit browsers */
+[data-theme="dark"] *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] *::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+/* Footer */
+[data-theme="dark"] footer {
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Diagram backgrounds */
+[data-theme="dark"] .auth-diagram {
+  background-color: var(--surface-color);
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+/* Buttons */
+[data-theme="dark"] .button {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Back to top button */
+[data-theme="dark"] #back-to-top {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] #back-to-top:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Steps list */
+[data-theme="dark"] .steps li:before {
+  background-color: var(--color-primary);
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  position: fixed;
+  z-index: 9999;
+  bottom: 30px;
+  right: 30px; /* Changed from left to right */
+  width: 50px; /* Increased size */
+  height: 50px; /* Increased size */
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Larger icon */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-3px) scale(1.05); /* Slightly larger on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); /* Larger shadow on hover */
+}
+
+.theme-toggle:active {
+  transform: translateY(0) scale(0.95); /* Press effect */
+}
+
+[data-theme="dark"] .theme-toggle {
+  background-color: var(--color-primary-light); /* Lighter color in dark mode for contrast */
+}
+
+/* Dark mode transition */
+body, 
+#spectaql,
+.sidebar,
+header,
+footer,
+.code-sample,
+a,
+h1, h2, h3, h4, h5, h6,
+button,
+input,
+table,
+code,
+pre,
+.theme-toggle {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Code syntax highlighting for dark mode */
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata {
+  color: #637777;
+}
+
+[data-theme="dark"] .token.punctuation {
+  color: #c9d1d9;
+}
+
+[data-theme="dark"] .token.namespace {
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .token.property,
+[data-theme="dark"] .token.tag,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.constant,
+[data-theme="dark"] .token.symbol,
+[data-theme="dark"] .token.deleted {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.selector,
+[data-theme="dark"] .token.attr-name,
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.builtin,
+[data-theme="dark"] .token.inserted {
+  color: #a5d6ff;
+}
+
+[data-theme="dark"] .token.operator,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url,
+[data-theme="dark"] .language-css .token.string,
+[data-theme="dark"] .style .token.string {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.atrule,
+[data-theme="dark"] .token.attr-value,
+[data-theme="dark"] .token.keyword {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .token.function,
+[data-theme="dark"] .token.class-name {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.variable {
+  color: #ffa657;
+}
+
+/* GraphQL specific tokens for dark mode */
+[data-theme="dark"] .token.graphql-schema,
+[data-theme="dark"] .token.graphql-type,
+[data-theme="dark"] .token.graphql-mutation,
+[data-theme="dark"] .token.graphql-query {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.graphql-field {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.graphql-argument {
+  color: #ffa657;
+}

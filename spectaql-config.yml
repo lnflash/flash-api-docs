@@ -1,0 +1,50 @@
+introspection:
+  schemaFile: ./schema.graphql
+  queryNameStrategy: capitalizeFirst
+  fieldExpansionDepth: 2
+
+spectaql:
+  logoFile: ./logo.png
+  faviconFile: ./favicon.ico
+  targetDir: ./docs
+
+info:
+  title: Flash API Documentation
+  description: Documentation for Flash's GraphQL API
+  termsOfService: https://flashapp.me/terms
+  contact:
+    name: Flash Support
+    url: https://flashapp.me/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+
+servers:
+  - url: https://api.flashapp.me/graphql
+    description: Production
+  - url: https://api.test.flashapp.me/graphql
+    description: Testing
+
+introHeading: Flash GraphQL API
+introBilled: 
+  - Flash provides merchants and users across the Caribbean with the ability to accept and send Bitcoin
+  - Earn rewards, and conduct mobile money transactions
+introDescription: |
+  This documentation provides details about the Flash GraphQL API, which powers all front-end experiences 
+  across web and mobile Flash apps.
+
+  ## Authentication
+  
+  Most endpoints require authentication. Obtain an authentication token by using the login mutation.
+  
+  Include the token in the HTTP header of subsequent requests:
+  ```
+  {
+    "Authorization": "Bearer YOUR_TOKEN"
+  }
+  ```
+
+  ## Rate Limiting
+  
+  The API enforces rate limits to ensure system stability. See the limits section for details.

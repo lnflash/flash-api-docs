@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash API Documentation</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/code-tabs.css">
+  <link rel="stylesheet" href="stylesheets/prism.css">
+  <link rel="stylesheet" href="stylesheets/syntax-highlighting.css">
+  <link rel="stylesheet" href="stylesheets/responsive.css">
+  <link rel="stylesheet" href="stylesheets/mobile.css">
+  <link rel="stylesheet" href="stylesheets/dark-mode.css">
+  <link rel="stylesheet" href="stylesheets/version-selector.css">
+  <style>
+    :root {
+      --color-primary: #1655c0;
+      --color-secondary: #161313;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    header {
+      background-color: var(--color-primary);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    
+    .logo img {
+      height: 40px;
+      margin-right: 1rem;
+    }
+    
+    .header-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+    }
+    
+    .sidebar {
+      width: 250px;
+      padding: 2rem;
+      background-color: #f5f5f5;
+      border-right: 1px solid #e1e1e1;
+    }
+    
+    .sidebar h2 {
+      margin-top: 0;
+      color: var(--color-secondary);
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .sidebar li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .sidebar a {
+      color: var(--color-secondary);
+      text-decoration: none;
+    }
+    
+    .sidebar a:hover {
+      color: var(--color-primary);
+    }
+    
+    .content {
+      flex: 1;
+      padding: 2rem;
+    }
+    
+    .code-sample {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow: auto;
+      font-family: monospace;
+      position: relative;
+    }
+
+    .code-sample .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      z-index: 10; /* Ensure copy button is always above other elements */
+    }
+
+    /* Language label for standalone code samples */
+    .code-sample[data-language]:before {
+      content: attr(data-language);
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: var(--color-primary);
+      color: white;
+      padding: 3px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: 500;
+      z-index: 5;
+    }
+
+    .code-sample .copy-button:hover {
+      opacity: 1;
+    }
+
+    .code-sample .copy-button.copied {
+      background-color: #28a745;
+    }
+    
+    footer {
+      background-color: var(--color-secondary);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    
+    .spec-container {
+      width: 100%;
+      height: 100%;
+      border: none;
+      min-height: 800px;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: var(--color-primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-right: 1rem;
+      text-align: center;
+    }
+
+    .button:hover {
+      background-color: #13459f;
+    }
+
+    .steps {
+      padding-left: 0;
+      counter-reset: step-counter;
+    }
+
+    .steps li {
+      margin-bottom: 2rem;
+      list-style-type: none;
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .steps li:before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      background-color: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .steps li h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-diagram {
+      background-color: white;
+      border-radius: 4px;
+      padding: 1rem;
+      margin: 2rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--color-secondary);
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    ul li, ol li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/logo-white.png" alt="Flash" height="40">
+      <span>API Documentation</span>
+    </div>
+    <div class="header-links">
+      <a href="https://api.test.flashapp.me/graphql" target="_blank">Interactive Explorer</a>
+      <a href="https://getflash.io" target="_blank">Flash Website</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="sidebar">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="images/logo-black.png" alt="Flash" class="logo-light" style="max-width: 120px; margin-bottom: 10px; display: block;">
+        <img src="images/logo-white.png" alt="Flash" class="logo-dark" style="max-width: 120px; margin-bottom: 10px; display: none;">
+      </div>
+      <h2>Quick Links</h2>
+      <ul>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#query-example">Query Example</a></li>
+        <li><a href="#mutation-example">Mutation Example</a></li>
+        <li><a href="#error-handling">Error Handling</a></li>
+        <li><a href="#absolute-zero">Absolute Zero Method</a></li>
+      </ul>
+      
+      <h2>Endpoints</h2>
+      <ul>
+        <li><strong>Production:</strong> https://api.flashapp.me/graphql</li>
+        <li><strong>Testing:</strong> https://api.test.flashapp.me/graphql</li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <h1>Flash GraphQL API</h1>
+      <p>This API provides access to Flash's Bitcoin and Lightning Network payment services for the Caribbean region.</p>
+
+      <div style="margin: 2rem 0;">
+        <a href="spec.html" class="button">View Full API Reference</a>
+        <a href="https://api.test.flashapp.me/graphql" target="_blank" class="button">Try API Explorer</a>
+      </div>
+
+      <h2 id="getting-started">Getting Started</h2>
+      <p>Follow these steps to integrate Flash payments into your application:</p>
+
+      <ol class="steps">
+        <li>
+          <h3>Create a Flash Account</h3>
+          <p>Sign up for a Flash merchant account at <a href="https://getflash.io" target="_blank">getflash.io</a>.</p>
+        </li>
+        <li>
+          <h3>Obtain API Credentials</h3>
+          <p>Get your API credentials from the Flash Dashboard. These will be used for authentication.</p>
+        </li>
+        <li>
+          <h3>Set Up Your Environment</h3>
+          <div class="code-sample" data-language="bash">
+            <pre>// Install the Flash GraphQL client (Example in JavaScript)
+npm install graphql-request graphql</pre>
+          </div>
+        </li>
+        <li>
+          <h3>Initialize the Client</h3>
+          <div class="code-sample" data-language="javascript">
+            <pre>import { GraphQLClient } from 'graphql-request';
+
+// For development, use the test environment
+const endpoint = 'https://api.test.flashapp.me/graphql';
+
+// For production
+// const endpoint = 'https://api.flashapp.me/graphql';
+
+const graphQLClient = new GraphQLClient(endpoint);
+
+// After authentication, set the auth token
+graphQLClient.setHeader('Authorization', 'Bearer YOUR_AUTH_TOKEN');</pre>
+          </div>
+        </li>
+        <li>
+          <h3>Make Your First Request</h3>
+          <div class="code-sample" data-language="javascript">
+            <pre>const query = `
+query GetMyAccount {
+  me {
+    id
+    defaultWalletId
+  }
+}`;
+
+async function fetchAccount() {
+  const data = await graphQLClient.request(query);
+  console.log(data);
+}
+
+fetchAccount();</pre>
+          </div>
+        </li>
+      </ol>
+
+      <p>For detailed examples of common use cases, refer to the <a href="spec.html">Full API Reference</a>.</p>
+
+      <h2 id="authentication">Authentication</h2>
+      <p>Flash API uses JSON Web Tokens (JWT) for authentication. Most API operations require authentication to identify the user and determine their permissions.</p>
+
+      <div class="auth-diagram">
+        <img src="images/diagrams/auth-flow.svg" alt="Authentication Flow Diagram" style="max-width: 100%;">
+      </div>
+
+      <h3>Authentication Process</h3>
+      <ol>
+        <li>
+          <strong>Request an auth token</strong> by sending a login mutation with your credentials:
+          <div class="code-examples" data-operation="authentication"></div>
+        </li>
+        <li>
+          <strong>Store the auth token</strong> securely in your application.
+          <p>The token is valid for 7 days. For security reasons, do not store it in localStorage in browser environments.</p>
+        </li>
+        <li>
+          <strong>Include the token</strong> in all subsequent API requests via the Authorization header:
+          <div class="code-sample" data-language="http">
+            <pre>Authorization: Bearer YOUR_AUTH_TOKEN</pre>
+          </div>
+        </li>
+        <li>
+          <strong>Handle token expiration</strong> by implementing appropriate error handling:
+          <div class="code-sample" data-language="javascript">
+            <pre>// Check for authentication errors
+if (error.message === 'Unauthorized' || error.message === 'Token expired') {
+  // Redirect to login or refresh token
+}
+</pre>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Security Best Practices</h3>
+      <ul>
+        <li>Never expose your auth token in client-side code or URLs</li>
+        <li>Use HTTPS for all API communication</li>
+        <li>Implement token refresh logic before expiration</li>
+        <li>Validate the token on your server before using it</li>
+      </ul>
+      
+      <h2 id="query-example">Query Example</h2>
+      <p>Fetch account details and wallet balances:</p>
+      <div class="code-examples" data-operation="fetch-account"></div>
+      
+      <h2 id="mutation-example">Mutation Example</h2>
+      <p>Create a Lightning invoice:</p>
+      <div class="code-examples" data-operation="create-invoice"></div>
+      
+      <h2 id="error-handling">Error Handling</h2>
+      <p>The API returns errors in the following format:</p>
+      <div class="code-sample" data-language="json">
+        <pre>{
+  "data": { ... },
+  "errors": [
+    {
+      "message": "Error message",
+      "locations": [{ "line": 2, "column": 3 }],
+      "path": ["fieldName"]
+    }
+  ]
+}</pre>
+      </div>
+
+      <h2 id="absolute-zero">Absolute Zero Method</h2>
+      <p>The Flash API documentation implementation uses the Absolute Zero methodology for continuous improvement. This revolutionary approach, based on reinforced self-play reasoning with zero data, ensures our API and its documentation evolve with minimal human intervention.</p>
+
+      <div class="auth-diagram">
+        <img src="images/diagrams/absolute-zero.svg" alt="Absolute Zero Method Diagram" style="max-width: 100%;">
+      </div>
+
+      <h3>Core Principles</h3>
+      <p>The Absolute Zero methodology operates on three fundamental components:</p>
+
+      <ul>
+        <li>
+          <strong>Task Proposer (πpropose):</strong> This component autonomously generates tasks optimized for learning and improvement, creating challenges specifically designed to enhance the system's capabilities.
+        </li>
+        <li>
+          <strong>Environment (e):</strong> Provides verifiable feedback and ground truth validation, ensuring all improvements are measured against reliable metrics without relying on external validation.
+        </li>
+        <li>
+          <strong>Solution Generator (πsolve):</strong> Solves the self-generated tasks and learns from outcomes, continuously enhancing its capabilities through reinforced self-learning.
+        </li>
+      </ul>
+
+      <h3>Implementation Benefits</h3>
+      <p>By implementing the Absolute Zero method in our documentation system, we achieve:</p>
+
+      <ul>
+        <li><strong>Self-Improving Documentation:</strong> The documentation evolves automatically based on usage patterns and identified pain points</li>
+        <li><strong>Zero Training Data Requirements:</strong> No need for extensive manually labeled datasets or examples</li>
+        <li><strong>Continuous Enhancement:</strong> The system perpetually refines itself through reinforced feedback loops</li>
+        <li><strong>Cross-Domain Learning:</strong> Improvements in one area benefit the entire system through knowledge transfer</li>
+      </ul>
+
+      <h3>Technical Implementation</h3>
+      <div class="code-sample" data-language="javascript">
+        <pre>// Absolute Zero implementation pseudocode
+class AbsoluteZeroReasoner {
+  constructor() {
+    this.model = new UnifiedModel();
+    this.metrics = new PerformanceMetrics();
+    this.environment = new VerifiableEnvironment();
+  }
+
+  async improveSystem() {
+    // Task proposal phase
+    const task = this.model.proposeTask();
+
+    // Environment verification
+    const { verifiedTask, groundTruth } =
+      this.environment.validate(task);
+
+    // Solution generation
+    const solution = this.model.solveTask(verifiedTask);
+
+    // Learning from outcomes
+    const feedback = this.metrics.evaluate(solution, groundTruth);
+    await this.model.learn(feedback);
+
+    return feedback.improvements;
+  }
+}</pre>
+      </div>
+
+      <p>For more information on the Absolute Zero methodology, refer to the research paper: <a href="https://arxiv.org/abs/2505.03335" target="_blank">Absolute Zero: Reinforced Self-play Reasoning with Zero Data</a>.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Flash. All rights reserved.</p>
+  </footer>
+
+  <script src="js/vendors/prism.js"></script>
+  <script src="js/vendors/prism-javascript.js"></script>
+  <script src="js/vendors/prism-json.js"></script>
+  <script src="js/vendors/prism-graphql.js"></script>
+  <script src="js/code-tabs.js"></script>
+  <script src="js/syntax-highlighter.js"></script>
+  <script src="js/code-examples.js"></script>
+  <script src="js/mobile.js"></script>
+  <script src="js/js/theme-switcher.js"></script>
+  <script src="js/theme-switcher.js"></script>
+  <script src="js/version-manager.js"></script>
+  <script src="js/version-router.js"></script>
+  <script src="js/version-comparison.js"></script>
+  <script>
+    // Add copy buttons to all code samples
+    document.addEventListener('DOMContentLoaded', function() {
+      const codeBlocks = document.querySelectorAll('.code-sample');
+
+      codeBlocks.forEach(function(block) {
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.textContent = 'Copy';
+
+        copyButton.addEventListener('click', function() {
+          const code = block.querySelector('pre').textContent;
+          navigator.clipboard.writeText(code).then(function() {
+            copyButton.textContent = 'Copied!';
+            copyButton.classList.add('copied');
+
+            setTimeout(function() {
+              copyButton.textContent = 'Copy';
+              copyButton.classList.remove('copied');
+            }, 2000);
+          });
+        });
+
+        block.appendChild(copyButton);
+      });
+    });
+  </script>
+</body>
+</html>

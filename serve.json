@@ -1,0 +1,11 @@
+{
+  "public": "public",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/docs",
+      "destination": "/docs/"
+    }
+  ]
+}

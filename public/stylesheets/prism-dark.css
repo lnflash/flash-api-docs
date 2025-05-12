@@ -1,0 +1,161 @@
+/**
+ * Dark theme for PrismJS syntax highlighting
+ * Based on GitHub Dark theme with some Flash brand color adjustments
+ */
+
+[data-theme="dark"] code[class*="language-"],
+[data-theme="dark"] pre[class*="language-"] {
+  color: #c9d1d9;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+[data-theme="dark"] pre[class*="language-"]::selection,
+[data-theme="dark"] pre[class*="language-"] ::selection,
+[data-theme="dark"] code[class*="language-"]::selection,
+[data-theme="dark"] code[class*="language-"] ::selection {
+  text-shadow: none;
+  background: #264f78;
+}
+
+@media print {
+  [data-theme="dark"] code[class*="language-"],
+  [data-theme="dark"] pre[class*="language-"] {
+    text-shadow: none;
+  }
+}
+
+/* Code blocks */
+[data-theme="dark"] pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+[data-theme="dark"] :not(pre) > code[class*="language-"],
+[data-theme="dark"] pre[class*="language-"] {
+  background: #1e1e1e;
+}
+
+/* Inline code */
+[data-theme="dark"] :not(pre) > code[class*="language-"] {
+  padding: .1em .3em;
+  border-radius: .3em;
+  white-space: normal;
+}
+
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .token.punctuation {
+  color: #c9d1d9;
+}
+
+[data-theme="dark"] .token.namespace {
+  opacity: .7;
+}
+
+[data-theme="dark"] .token.property,
+[data-theme="dark"] .token.tag,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.constant,
+[data-theme="dark"] .token.symbol,
+[data-theme="dark"] .token.deleted {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.selector,
+[data-theme="dark"] .token.attr-name,
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.builtin,
+[data-theme="dark"] .token.inserted {
+  color: #a5d6ff;
+}
+
+[data-theme="dark"] .token.operator,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url,
+[data-theme="dark"] .language-css .token.string,
+[data-theme="dark"] .style .token.string {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.atrule,
+[data-theme="dark"] .token.attr-value,
+[data-theme="dark"] .token.keyword {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .token.function,
+[data-theme="dark"] .token.class-name {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.variable {
+  color: #ffa657;
+}
+
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.bold {
+  font-weight: bold;
+}
+
+[data-theme="dark"] .token.italic {
+  font-style: italic;
+}
+
+[data-theme="dark"] .token.entity {
+  cursor: help;
+}
+
+/* GraphQL specific syntax highlighting */
+[data-theme="dark"] .token.graphql-operation {
+  color: #ff7b72;
+}
+
+[data-theme="dark"] .token.graphql-field {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.graphql-variable {
+  color: #ffa657;
+}
+
+[data-theme="dark"] .token.graphql-argument {
+  color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.graphql-fragment {
+  color: #a5d6ff;
+}
+
+/* JSON specific syntax highlighting */
+[data-theme="dark"] .token.property {
+  color: #79c0ff;
+}
+
+[data-theme="dark"] .token.property + .token.punctuation + .token.string {
+  color: #a5d6ff;
+}

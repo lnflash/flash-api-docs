@@ -1,0 +1,97 @@
+/* Styles for multi-language code examples */
+
+.code-tabs {
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.code-tabs-header {
+  display: flex;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  scrollbar-width: none; /* For Firefox */
+}
+
+.code-tabs-header::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.code-tab-btn, .code-tab-trigger {
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.code-tab-btn:hover, .code-tab-trigger:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: #333;
+}
+
+.code-tab-btn.active, .code-tab-trigger.active {
+  color: var(--color-primary, #1655c0);
+  border-bottom-color: var(--color-primary, #1655c0);
+  background-color: transparent;
+}
+
+.code-tabs-content {
+  position: relative;
+}
+
+.code-tab-content, .code-tab-pane {
+  display: none;
+}
+
+.code-tab-content.active, .code-tab-pane.active {
+  display: block;
+}
+
+.code-tab-content .code-sample,
+.code-tab-pane .code-sample {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Language indicators */
+.code-language-badge, .code-language-label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background-color: var(--color-primary, #1655c0);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-bottom-right-radius: 6px;
+  border-top-left-radius: 6px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  z-index: 10;
+}
+
+/* Adjust the copy button position when language badge is present */
+.code-sample .copy-button {
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 11;
+}
+
+/* Remove border-radius when inside tabs */
+.code-tabs .code-sample {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Enhanced styling for code example containers */
+.code-examples {
+  margin: 2rem 0;
+}

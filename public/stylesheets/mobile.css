@@ -1,0 +1,240 @@
+/* Mobile-specific styles for Flash API Documentation */
+
+/* Mobile navigation styling */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  height: 60px;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-menu-toggle {
+  border: none;
+  background: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-icon, 
+.hamburger-icon:before, 
+.hamburger-icon:after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-secondary);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hamburger-icon:before {
+  position: absolute;
+  top: -8px;
+}
+
+.hamburger-icon:after {
+  position: absolute;
+  top: 8px;
+}
+
+.mobile-menu-open .hamburger-icon {
+  background-color: transparent;
+}
+
+.mobile-menu-open .hamburger-icon:before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.mobile-menu-open .hamburger-icon:after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.mobile-menu-open .mobile-overlay {
+  display: block;
+}
+
+/* Mobile collapsible sections */
+.mobile-section {
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-section-header {
+  padding: 0.75rem 1rem;
+  background-color: #f8f8f8;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.mobile-section-header:after {
+  content: '+';
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+.mobile-section.open .mobile-section-header:after {
+  content: '−';
+}
+
+.mobile-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: white;
+}
+
+.mobile-section.open .mobile-section-content {
+  max-height: 2000px;
+  transition: max-height 0.5s ease-in;
+}
+
+/* Horizontal scrolling indicators for code blocks */
+.horizontally-scrollable {
+  position: relative;
+}
+
+.scroll-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.scroll-fade-left {
+  left: 0;
+  background: linear-gradient(to right, rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0));
+}
+
+.scroll-fade-right {
+  right: 0;
+  background: linear-gradient(to left, rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0));
+}
+
+.scroll-fade.visible {
+  opacity: 1;
+}
+
+/* Mobile-specific layout adjustments */
+@media (max-width: 768px) {
+  /* General layout */
+  body {
+    padding-top: 60px !important;
+  }
+  
+  .mobile-nav {
+    display: flex !important;
+  }
+  
+  header {
+    display: none !important;
+  }
+  
+  .sidebar {
+    position: fixed !important;
+    top: 60px !important;
+    left: -100% !important;
+    bottom: 0 !important;
+    width: 85% !important;
+    max-width: 300px !important;
+    z-index: 1000 !important;
+    transition: left 0.3s ease-out !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  .mobile-menu-open .sidebar {
+    left: 0 !important;
+  }
+  
+  main {
+    padding-top: 0 !important;
+  }
+  
+  /* Buttons and interactive elements */
+  .code-tab-btn {
+    flex: 1 0 auto !important;
+    text-align: center !important;
+  }
+  
+  /* Touch-friendly buttons */
+  button, 
+  .button, 
+  a.button {
+    min-height: 44px !important;
+  }
+  
+  /* Adjust collapsible sections on mobile only */
+  h2[id] {
+    cursor: pointer !important;
+  }
+  
+  .steps li {
+    margin-bottom: 1.5rem !important;
+    padding-left: 2.5rem !important;
+  }
+  
+  .steps li:before {
+    width: 25px !important;
+    height: 25px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  /* Improve code sample readability on mobile */
+  .code-sample pre {
+    white-space: pre !important;
+    word-wrap: normal !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  .mobile-section-header {
+    padding: 0.6rem 0.8rem !important;
+    font-size: 1rem !important;
+  }
+}

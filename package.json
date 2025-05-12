@@ -1,0 +1,39 @@
+{
+  "name": "flash-api-docs",
+  "version": "1.0.0",
+  "description": "Flash GraphQL API Documentation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fetch-schema": "get-graphql-schema https://api.flashapp.me/graphql > schema.graphql",
+    "fetch-schema:beta": "get-graphql-schema https://api.test.flashapp.me/graphql > schema.beta.graphql",
+    "fetch-schema:v1.1.0": "get-graphql-schema https://api.flashapp.me/graphql > schema.v1.1.0.graphql",
+    "generate-docs": "spectaql spectaql-config.yml",
+    "patch-spec": "node src/spec-patch.js",
+    "copy-assets": "cp -r src/css public/css && cp -r src/js public/js && cp -r src/images public/images && cp -f src/index.html public/index.html && cp -f src/stylesheets/* public/stylesheets/",
+    "build": "npm run fetch-schema && npm run generate-docs && cp -r docs/* public/ && npm run copy-assets && npm run patch-spec",
+    "build:versions": "npm run build && node build-versions.js",
+    "start": "serve public",
+    "dev": "serve public --cors -l 3000"
+  },
+  "keywords": [
+    "graphql",
+    "api",
+    "documentation",
+    "flash",
+    "bitcoin",
+    "lightning"
+  ],
+  "author": "Flash Team",
+  "license": "ISC",
+  "dependencies": {
+    "@2fd/graphdoc": "^2.4.0",
+    "get-graphql-schema": "^2.1.2",
+    "graphql": "^16.11.0",
+    "node-fetch": "^2.7.0",
+    "spectaql": "^3.0.4"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
