@@ -30,10 +30,31 @@ specContent = specContent.replace(
   '<link rel="stylesheet" href="stylesheets/spectaql.min.css" />\n    <link rel="stylesheet" href="stylesheets/custom.css" />\n    <link rel="stylesheet" href="stylesheets/version-selector.css" />'
 );
 
-// Add back link
+// Add back link and development notice
 specContent = specContent.replace(
   /<body id="spectaql">/,
-  '<body id="spectaql">\n    <a href="index.html" class="back-link">← Back to Overview</a>'
+  `<body id="spectaql">
+    <a href="index.html" class="back-link">← Back to Overview</a>
+    <div class="notice">
+      <strong>⚠️ Development Notice:</strong> The Flash API is currently under active development. All endpoints, parameters, and responses are subject to change and improvement. This documentation will be updated as the API evolves.
+    </div>
+    <style>
+      .notice {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffb300;
+        padding: 16px;
+        margin: 15px;
+        border-radius: 4px;
+        color: #5d4037;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .notice strong {
+        color: #d32f2f;
+        font-weight: 600;
+      }
+    </style>`
 );
 
 // Add version manager scripts

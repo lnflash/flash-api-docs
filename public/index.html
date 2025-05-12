@@ -267,6 +267,10 @@
     </div>
 
     <div class="content">
+      <div class="notice">
+        <strong>⚠️ Development Notice:</strong> The Flash API is currently under active development. All endpoints, parameters, and responses are subject to change and improvement. This documentation will be updated as the API evolves.
+      </div>
+
       <h1>Flash GraphQL API</h1>
       <p>This API provides access to Flash's Bitcoin and Lightning Network payment services for the Caribbean region.</p>
 
@@ -274,6 +278,24 @@
         <a href="spec.html" class="button">View Full API Reference</a>
         <a href="https://api.test.flashapp.me/graphql" target="_blank" class="button">Try API Explorer</a>
       </div>
+
+      <style>
+        .notice {
+          background-color: #fff8e1;
+          border-left: 4px solid #ffb300;
+          padding: 16px;
+          margin-bottom: 24px;
+          border-radius: 4px;
+          color: #5d4037;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .notice strong {
+          color: #d32f2f;
+          font-weight: 600;
+        }
+      </style>
 
       <h2 id="getting-started">Getting Started</h2>
       <p>Follow these steps to integrate Flash payments into your application:</p>
