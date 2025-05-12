@@ -20,7 +20,7 @@
 }
 
 #api-search-input:focus {
-  box-shadow: 0 0 0 2px rgba(22, 85, 192, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .search-icon {
@@ -76,20 +76,20 @@
 
 .search-result-badge.h1,
 .search-result-badge.h2 {
-  background-color: #1655c0;
+  background-color: #000000;
   color: white;
 }
 
 .search-result-badge.h3,
 .search-result-badge.h4 {
-  background-color: #5c8fd6;
+  background-color: #333333;
   color: white;
 }
 
 .search-result-badge.h5,
 .search-result-badge.h6,
 .search-result-badge.description {
-  background-color: #a8c3ec;
+  background-color: #666666;
   color: #333;
 }
 
@@ -106,7 +106,7 @@
 
 @keyframes highlight {
   0% {
-    background-color: rgba(22, 85, 192, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
   }
   100% {
     background-color: transparent;
