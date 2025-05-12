@@ -257,7 +257,6 @@
         <li><a href="#query-example">Query Example</a></li>
         <li><a href="#mutation-example">Mutation Example</a></li>
         <li><a href="#error-handling">Error Handling</a></li>
-        <li><a href="#absolute-zero">Absolute Zero Method</a></li>
       </ul>
       
       <h2>Endpoints</h2>
@@ -282,11 +281,11 @@
       <ol class="steps">
         <li>
           <h3>Create a Flash Account</h3>
-          <p>Sign up for a Flash merchant account at <a href="https://getflash.io" target="_blank">getflash.io</a>.</p>
+          <p>Sign up for a Flash personal account at <a href="https://getflash.io" target="_blank">getflash.io</a>.</p>
         </li>
         <li>
           <h3>Obtain API Credentials</h3>
-          <p>Get your API credentials from the Flash Dashboard. These will be used for authentication.</p>
+          <p>Authenticate with Flash by entering the 6-digit code sent to your registered phone number via SMS. This one-time code will generate an authentication token for API access.</p>
         </li>
         <li>
           <h3>Set Up Your Environment</h3>
@@ -401,41 +400,49 @@ if (error.message === 'Unauthorized' || error.message === 'Token expired') {
 }</pre>
       </div>
 
-      <h2 id="absolute-zero">Absolute Zero Method</h2>
-      <p>The Flash API documentation implementation uses the Absolute Zero methodology for continuous improvement. This revolutionary approach, based on reinforced self-play reasoning with zero data, ensures our API and its documentation evolve with minimal human intervention.</p>
+    </div>
+  </main>
 
-      <div class="auth-diagram">
-        <img src="images/diagrams/absolute-zero.svg" alt="Absolute Zero Method Diagram" style="max-width: 100%;">
-      </div>
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 Flash. All rights reserved.</p>
 
-      <h3>Core Principles</h3>
-      <p>The Absolute Zero methodology operates on three fundamental components:</p>
+      <details class="footer-note">
+        <summary>Absolute Zero Method</summary>
+        <div class="footer-note-content">
+          <p>The Flash API documentation implementation uses the Absolute Zero methodology for continuous improvement. This revolutionary approach, based on reinforced self-play reasoning with zero data, ensures our API and its documentation evolve with minimal human intervention.</p>
 
-      <ul>
-        <li>
-          <strong>Task Proposer (πpropose):</strong> This component autonomously generates tasks optimized for learning and improvement, creating challenges specifically designed to enhance the system's capabilities.
-        </li>
-        <li>
-          <strong>Environment (e):</strong> Provides verifiable feedback and ground truth validation, ensuring all improvements are measured against reliable metrics without relying on external validation.
-        </li>
-        <li>
-          <strong>Solution Generator (πsolve):</strong> Solves the self-generated tasks and learns from outcomes, continuously enhancing its capabilities through reinforced self-learning.
-        </li>
-      </ul>
+          <div class="auth-diagram">
+            <img src="images/diagrams/absolute-zero.svg" alt="Absolute Zero Method Diagram" style="max-width: 100%;">
+          </div>
 
-      <h3>Implementation Benefits</h3>
-      <p>By implementing the Absolute Zero method in our documentation system, we achieve:</p>
+          <h4>Core Principles</h4>
+          <p>The Absolute Zero methodology operates on three fundamental components:</p>
 
-      <ul>
-        <li><strong>Self-Improving Documentation:</strong> The documentation evolves automatically based on usage patterns and identified pain points</li>
-        <li><strong>Zero Training Data Requirements:</strong> No need for extensive manually labeled datasets or examples</li>
-        <li><strong>Continuous Enhancement:</strong> The system perpetually refines itself through reinforced feedback loops</li>
-        <li><strong>Cross-Domain Learning:</strong> Improvements in one area benefit the entire system through knowledge transfer</li>
-      </ul>
+          <ul>
+            <li>
+              <strong>Task Proposer (πpropose):</strong> This component autonomously generates tasks optimized for learning and improvement, creating challenges specifically designed to enhance the system's capabilities.
+            </li>
+            <li>
+              <strong>Environment (e):</strong> Provides verifiable feedback and ground truth validation, ensuring all improvements are measured against reliable metrics without relying on external validation.
+            </li>
+            <li>
+              <strong>Solution Generator (πsolve):</strong> Solves the self-generated tasks and learns from outcomes, continuously enhancing its capabilities through reinforced self-learning.
+            </li>
+          </ul>
 
-      <h3>Technical Implementation</h3>
-      <div class="code-sample" data-language="javascript">
-        <pre>// Absolute Zero implementation pseudocode
+          <h4>Implementation Benefits</h4>
+          <p>By implementing the Absolute Zero method in our documentation system, we achieve:</p>
+
+          <ul>
+            <li><strong>Self-Improving Documentation:</strong> The documentation evolves automatically based on usage patterns and identified pain points</li>
+            <li><strong>Zero Training Data Requirements:</strong> No need for extensive manually labeled datasets or examples</li>
+            <li><strong>Continuous Enhancement:</strong> The system perpetually refines itself through reinforced feedback loops</li>
+            <li><strong>Cross-Domain Learning:</strong> Improvements in one area benefit the entire system through knowledge transfer</li>
+          </ul>
+
+          <div class="code-sample" data-language="javascript">
+            <pre>// Absolute Zero implementation pseudocode
 class AbsoluteZeroReasoner {
   constructor() {
     this.model = new UnifiedModel();
@@ -461,14 +468,54 @@ class AbsoluteZeroReasoner {
     return feedback.improvements;
   }
 }</pre>
-      </div>
+          </div>
 
-      <p>For more information on the Absolute Zero methodology, refer to the research paper: <a href="https://arxiv.org/abs/2505.03335" target="_blank">Absolute Zero: Reinforced Self-play Reasoning with Zero Data</a>.</p>
+          <p>For more information on the Absolute Zero methodology, refer to the research paper: <a href="https://arxiv.org/abs/2505.03335" target="_blank">Absolute Zero: Reinforced Self-play Reasoning with Zero Data</a>.</p>
+        </div>
+      </details>
     </div>
-  </main>
 
-  <footer>
-    <p>&copy; 2024 Flash. All rights reserved.</p>
+    <style>
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .footer-note {
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      .footer-note summary {
+        cursor: pointer;
+        color: #ccc;
+        display: inline-block;
+        padding: 5px 0;
+      }
+
+      .footer-note summary:hover {
+        color: white;
+      }
+
+      .footer-note-content {
+        background-color: #f5f5f5;
+        color: #333;
+        padding: 20px;
+        margin-top: 10px;
+        border-radius: 4px;
+      }
+
+      .footer-note-content h4 {
+        color: var(--color-secondary);
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+
+      .footer-note-content .auth-diagram {
+        background-color: white;
+      }
+    </style>
   </footer>
 
   <script src="js/vendors/prism.js"></script>
