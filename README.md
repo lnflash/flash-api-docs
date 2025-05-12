@@ -14,7 +14,6 @@ This repository contains a simplified documentation website for Flash's GraphQL 
 - Pagination for better navigation
 - Version selector with support for multiple API versions
 - Version comparison tool showing changes between versions
-- Dark/light theme toggle with system preference detection
 
 ## Local Development
 
@@ -107,10 +106,8 @@ The DigitalOcean App is configured as a static site with:
     - `version-manager.js` - Version selector component
     - `version-router.js` - Version routing system
     - `version-comparison.js` - Version comparison tool
-    - `theme-switcher.js` - Dark/light theme toggle
   - `stylesheets/` - CSS files
     - `version-selector.css` - Styles for version selector
-    - `dark-mode.css` - Dark theme styles
 
 - `public/` - Generated website files
   - `index.html` - Landing page with integration examples
