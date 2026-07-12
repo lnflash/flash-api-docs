@@ -11,7 +11,7 @@
     "generate-docs": "spectaql spectaql-config.yml",
     "patch-spec": "node src/spec-patch.js",
     "copy-assets": "cp -r src/css public/css && cp -r src/js public/js && cp -r src/images public/images && cp -f src/index.html public/index.html && cp -f src/stylesheets/* public/stylesheets/",
-    "build": "npm run fetch-schema && npm run generate-docs && cp -r docs/* public/ && npm run copy-assets && npm run patch-spec",
+    "build": "npm run fetch-schema && npm run generate-docs && cp -r docs/* public/ && cp docs/index.html public/spec.html && npm run copy-assets && npm run patch-spec",
     "build:versions": "npm run build && node build-versions.js",
     "start": "serve public",
     "dev": "serve public --cors -l 3000"
@@ -31,7 +31,7 @@
     "get-graphql-schema": "^2.1.2",
     "graphql": "^16.11.0",
     "node-fetch": "^2.7.0",
-    "spectaql": "^3.0.4"
+    "spectaql": "^3.0.9"
   },
   "devDependencies": {
     "serve": "^14.2.4"
