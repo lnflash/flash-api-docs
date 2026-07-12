@@ -267,9 +267,6 @@
     </div>
 
     <div class="content">
-      <div class="notice">
-        <strong>⚠️ Development Notice:</strong> The Flash API is currently under active development. All endpoints, parameters, and responses are subject to change and improvement. This documentation will be updated as the API evolves.
-      </div>
 
       <h1>Flash GraphQL API</h1>
       <p>This API provides access to Flash's Bitcoin and Lightning Network payment services for the Caribbean region.</p>
@@ -454,73 +451,7 @@ if (error.message === 'Unauthorized' || error.message === 'Token expired') {
     <div class="footer-content">
       <p>&copy; 2024 Flash. All rights reserved.</p>
 
-      <details class="footer-note">
-        <summary>Absolute Zero Method</summary>
-        <div class="footer-note-content">
-          <p>The Flash API documentation implementation uses the Absolute Zero methodology for continuous improvement. This revolutionary approach, based on reinforced self-play reasoning with zero data, ensures our API and its documentation evolve with minimal human intervention.</p>
-
-          <div class="auth-diagram">
-            <img src="images/diagrams/absolute-zero.svg" alt="Absolute Zero Method Diagram" style="max-width: 100%;">
-          </div>
-
-          <h4>Core Principles</h4>
-          <p>The Absolute Zero methodology operates on three fundamental components:</p>
-
-          <ul>
-            <li>
-              <strong>Task Proposer (πpropose):</strong> This component autonomously generates tasks optimized for learning and improvement, creating challenges specifically designed to enhance the system's capabilities.
-            </li>
-            <li>
-              <strong>Environment (e):</strong> Provides verifiable feedback and ground truth validation, ensuring all improvements are measured against reliable metrics without relying on external validation.
-            </li>
-            <li>
-              <strong>Solution Generator (πsolve):</strong> Solves the self-generated tasks and learns from outcomes, continuously enhancing its capabilities through reinforced self-learning.
-            </li>
-          </ul>
-
-          <h4>Implementation Benefits</h4>
-          <p>By implementing the Absolute Zero method in our documentation system, we achieve:</p>
-
-          <ul>
-            <li><strong>Self-Improving Documentation:</strong> The documentation evolves automatically based on usage patterns and identified pain points</li>
-            <li><strong>Zero Training Data Requirements:</strong> No need for extensive manually labeled datasets or examples</li>
-            <li><strong>Continuous Enhancement:</strong> The system perpetually refines itself through reinforced feedback loops</li>
-            <li><strong>Cross-Domain Learning:</strong> Improvements in one area benefit the entire system through knowledge transfer</li>
-          </ul>
-
-          <div class="code-sample" data-language="javascript">
-            <pre>// Absolute Zero implementation pseudocode
-class AbsoluteZeroReasoner {
-  constructor() {
-    this.model = new UnifiedModel();
-    this.metrics = new PerformanceMetrics();
-    this.environment = new VerifiableEnvironment();
-  }
-
-  async improveSystem() {
-    // Task proposal phase
-    const task = this.model.proposeTask();
-
-    // Environment verification
-    const { verifiedTask, groundTruth } =
-      this.environment.validate(task);
-
-    // Solution generation
-    const solution = this.model.solveTask(verifiedTask);
-
-    // Learning from outcomes
-    const feedback = this.metrics.evaluate(solution, groundTruth);
-    await this.model.learn(feedback);
-
-    return feedback.improvements;
-  }
-}</pre>
-          </div>
-
-          <p>For more information on the Absolute Zero methodology, refer to the research paper: <a href="https://arxiv.org/abs/2505.03335" target="_blank">Absolute Zero: Reinforced Self-play Reasoning with Zero Data</a>.</p>
-        </div>
-      </details>
-    </div>
+      </div>
 
     <style>
       .footer-content {
