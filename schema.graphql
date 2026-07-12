@@ -1,10 +1,10 @@
-directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
-
 """Exposes a URL that specifies the behavior of this scalar."""
 directive @specifiedBy(
   """The URL that specifies the behavior of this scalar."""
   url: String!
 ) on SCALAR
+
+directive @defer(label: String, if: Boolean! = true) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 interface Account {
   callbackEndpoints: [CallbackEndpoint!]!
@@ -89,6 +89,9 @@ type AccountLimits {
   withdrawal: [AccountLimit!]!
 }
 
+"""Bank account number. Accepts String or Int and coerces to String."""
+scalar AccountNumber
+
 input AccountUpdateDefaultWalletIdInput {
   walletId: WalletId!
 }
@@ -112,6 +115,56 @@ type AccountUpdateNotificationSettingsPayload {
   errors: [Error!]!
 }
 
+type AccountUpgradePayload {
+  errors: [Error]
+  id: String
+  status: String
+}
+
+type AccountUpgradeRequest {
+  address: Address!
+  bankAccount: BankAccount
+  currentLevel: AccountLevel!
+  email: String
+  fullName: String!
+  idDocument: Boolean!
+
+  """ERPNext document name"""
+  name: String!
+  phoneNumber: String!
+  requestedLevel: AccountLevel!
+
+  """Status of the upgrade request"""
+  status: String!
+  terminalsRequested: Int!
+  username: String!
+}
+
+type AccountUpgradeRequestPayload {
+  errors: [Error]
+  upgradeRequest: AccountUpgradeRequest
+}
+
+type Address {
+  city: String!
+  country: String!
+  line1: String!
+  line2: String
+  postalCode: String
+  state: String!
+  title: String!
+}
+
+input AddressInput {
+  city: String!
+  country: String!
+  line1: String!
+  line2: String
+  postalCode: String
+  state: String!
+  title: String!
+}
+
 """An Opaque Bearer token"""
 scalar AuthToken
 
@@ -121,6 +174,171 @@ type AuthTokenPayload {
   totpRequired: Boolean
 }
 
+type Bank {
+  name: String!
+}
+
+type BankAccount {
+  accountName: String
+  accountNumber: String!
+  accountType: String!
+  bankBranch: String!
+  bankName: String!
+
+  """Account currency (e.g. JMD, USD)"""
+  currency: String!
+
+  """ERPNext bank account identifier"""
+  id: ID
+  isDefault: Boolean!
+}
+
+input BankAccountInput {
+  accountNumber: AccountNumber!
+  accountType: String!
+  bankBranch: String!
+  bankName: String!
+  currency: String!
+}
+
+type BridgeAddExternalAccountPayload {
+  errors: [Error!]!
+  externalAccount: BridgeExternalAccountLink
+}
+
+input BridgeCancelWithdrawalRequestInput {
+  withdrawalId: ID!
+}
+
+type BridgeCancelWithdrawalRequestPayload {
+  errors: [Error!]!
+  withdrawal: BridgeWithdrawal
+}
+
+input BridgeCreateExternalAccountInput {
+  accountNumber: String!
+  accountOwnerName: String!
+  bankName: String!
+  checkingOrSavings: String = "checking"
+  city: String!
+  country: String!
+  postalCode: String!
+  routingNumber: String!
+  state: String!
+  streetLine1: String!
+}
+
+type BridgeCreateExternalAccountPayload {
+  errors: [Error!]!
+  externalAccount: BridgeExternalAccount
+}
+
+type BridgeCreateVirtualAccountPayload {
+  errors: [Error!]!
+  virtualAccount: BridgeVirtualAccount
+}
+
+input BridgeDeleteExternalAccountInput {
+  externalAccountId: ID!
+}
+
+type BridgeDeleteExternalAccountPayload {
+  errors: [Error!]!
+  externalAccount: BridgeExternalAccount
+}
+
+type BridgeExternalAccount {
+  accountNumberLast4: String!
+  bankName: String!
+  id: ID!
+  isDefault: Boolean!
+  status: String!
+}
+
+type BridgeExternalAccountLink {
+  expiresAt: String!
+  linkUrl: String!
+}
+
+input BridgeInitiateKycInput {
+  email: String
+  full_name: String
+  type: String
+}
+
+type BridgeInitiateKycPayload {
+  errors: [Error!]!
+  kycLink: BridgeKycLink
+}
+
+input BridgeInitiateWithdrawalInput {
+  withdrawalId: ID!
+}
+
+type BridgeInitiateWithdrawalPayload {
+  errors: [Error!]!
+  withdrawal: BridgeWithdrawal
+}
+
+type BridgeKycLink {
+  kycLink: String!
+  tosLink: String!
+}
+
+input BridgeRequestWithdrawalInput {
+  amount: String!
+  externalAccountId: ID!
+}
+
+type BridgeRequestWithdrawalPayload {
+  errors: [Error!]!
+  withdrawal: BridgeWithdrawal
+}
+
+input BridgeSetDefaultExternalAccountInput {
+  externalAccountId: ID!
+}
+
+type BridgeSetDefaultExternalAccountPayload {
+  errors: [Error!]!
+  externalAccount: BridgeExternalAccount
+}
+
+type BridgeVirtualAccount {
+  accountNumber: String
+  accountNumberLast4: String
+  bankName: String
+  id: ID
+  kycLink: String
+  message: String
+  pending: Boolean
+  routingNumber: String
+  tosLink: String
+}
+
+type BridgeWithdrawal {
+  amount: String!
+  bridgeDeveloperFee: String
+  bridgeExchangeFee: String
+  bridgeTransferId: String
+  createdAt: String!
+  currency: String!
+  estimatedBridgeFee: String
+  estimatedBridgeFeePercent: String
+  estimatedCustomerFee: String
+  estimatedGasBuffer: String
+  externalAccountId: String
+  failureReason: String
+  finalAmount: String
+  flashFee: String
+  flashFeeIsEstimate: Boolean!
+  flashFeeNotice: String
+  flashFeePercent: String
+  id: ID!
+  status: String!
+  subtotalAmount: String
+}
+
 """
 A wallet belonging to an account which contains a BTC balance and a list of transactions.
 """
@@ -128,8 +346,9 @@ type BTCWallet implements Wallet {
   accountId: ID!
 
   """A balance stored in BTC."""
-  balance: SignedAmount!
+  balance: FractionalCentAmount
   id: ID!
+  isExternal: Boolean!
   lnurlp: Lnurl
 
   """An unconfirmed incoming onchain balance."""
@@ -173,6 +392,15 @@ type BuildInformation {
   helmRevision: Int
 }
 
+input BusinessAccountUpgradeRequestInput {
+  address: AddressInput!
+  bankAccount: BankAccountInput
+  fullName: String!
+  idDocument: String
+  level: AccountLevel!
+  terminalsRequested: Int = 0
+}
+
 type CallbackEndpoint {
   id: EndpointId!
   url: EndpointUrl!
@@ -214,28 +442,52 @@ input CaptchaRequestAuthCodeInput {
 
 type CashoutOffer {
   """The rate used when withdrawing to a JMD bank account"""
-  exchangeRate: JMDCents!
+  exchangeRate: JMDCents
 
   """The time at which this offer is no longer accepted by Flash"""
   expiresAt: Timestamp!
 
-  """The amount that Flash is charging for it's services"""
+  """The amount that Flash is charging for its services"""
   flashFee: USDCents!
 
   """ID of the offer"""
   offerId: ID!
 
-  """The amount Flash owes to the user denominated in JMD as cents"""
-  receiveJmd: JMDCents!
+  """
+  The amount Flash owes to the user denominated in JMD cents (null for USD payouts)
+  """
+  receiveJmd: JMDCents
 
-  """The amount Flash owes to the user denominated in USD as cents"""
-  receiveUsd: USDCents!
+  """
+  The amount Flash owes to the user denominated in USD cents (null for JMD payouts)
+  """
+  receiveUsd: USDCents
 
   """The amount the user is sending to flash"""
   send: USDCents!
 
   """ID for the users USD wallet to send from"""
   walletId: WalletId!
+}
+
+type CashWalletCutover {
+  completedAt: Timestamp
+  cutoverVersion: Int!
+  pauseReason: String
+  pausedAt: Timestamp
+  runId: String
+  scheduledAt: Timestamp
+  startedAt: Timestamp
+  state: CashWalletCutoverState!
+  updatedAt: Timestamp!
+  updatedBy: String
+}
+
+enum CashWalletCutoverState {
+  COMPLETE
+  IN_PROGRESS
+  PRE
+  ROLLED_BACK
 }
 
 """(Positive) Cent amount (1/100 of a dollar)"""
@@ -368,14 +620,27 @@ type FeesInformation {
   deposit: DepositFeesInformation!
 }
 
-"""(Positive) Cent amount (1/100 of a dollar) as a float"""
+"""
+Cent amount (1/100 of a dollar) as a float, can be positive or negative
+"""
 scalar FractionalCentAmount
 
 """
 Provides global settings for the application which might have an impact for the user.
 """
 type Globals {
+  """
+  Whether Bridge (international bank transfer) entry points
+  should be shown to the user. Controlled by the instance-wide bridge feature flag.
+  """
+  bridgeEnabled: Boolean!
   buildInformation: BuildInformation!
+
+  """
+  Whether cashout (settle to local bank account) entry points
+  should be shown to the user. Controlled by the instance-wide cashout feature flag.
+  """
+  cashoutEnabled: Boolean!
   feesInformation: FeesInformation!
 
   """
@@ -397,6 +662,13 @@ type Globals {
 
   """A list of countries and their supported auth channels"""
   supportedCountries: [Country!]!
+
+  """
+  Whether wallet top-up entry points (card webview and
+  bank-transfer-to-support) should be shown to the user. Controlled by the
+  instance-wide topup feature flag.
+  """
+  topupEnabled: Boolean!
 }
 
 type GraphQLApplicationError implements Error {
@@ -408,10 +680,33 @@ type GraphQLApplicationError implements Error {
 """Hex-encoded string of 32 bytes"""
 scalar Hex32Bytes
 
+input IdDocumentUploadUrlGenerateInput {
+  """MIME type (image/jpeg, image/png, image/webp)"""
+  contentType: String!
+
+  """Original filename"""
+  filename: String!
+}
+
+type IdDocumentUploadUrlPayload {
+  errors: [Error!]!
+
+  """Storage key for the uploaded file (use to generate read URLs)"""
+  fileKey: String
+
+  """Pre-signed URL for uploading the ID document directly to storage"""
+  uploadUrl: String
+}
+
 input InitiateCashoutInput {
   """The id of the offer being executed."""
   offerId: ID!
   walletId: WalletId!
+}
+
+type InitiatedCashoutResponse {
+  errors: [Error!]!
+  id: ID
 }
 
 union InitiationVia = InitiationViaIntraLedger | InitiationViaLn | InitiationViaOnChain
@@ -653,6 +948,20 @@ https://github.com/lnurl/luds/blob/luds/01.md
 """
 scalar Lnurl
 
+input LnurlPaymentSendInput {
+  """Amount to spend from the USD/USDT wallet, in USD cents."""
+  amount: FractionalCentAmount!
+
+  """LNURL-pay value to decode and pay."""
+  lnurl: Lnurl!
+
+  """Optional memo for the Lightning payment."""
+  memo: Memo
+
+  """Wallet ID with sufficient balance. Must belong to the current user."""
+  walletId: WalletId!
+}
+
 input LnUsdInvoiceCreateInput {
   """Amount in USD cents."""
   amount: FractionalCentAmount!
@@ -747,18 +1056,29 @@ type Mutation {
   accountEnableNotificationChannel(input: AccountEnableNotificationChannelInput!): AccountUpdateNotificationSettingsPayload!
   accountUpdateDefaultWalletId(input: AccountUpdateDefaultWalletIdInput!): AccountUpdateDefaultWalletIdPayload!
   accountUpdateDisplayCurrency(input: AccountUpdateDisplayCurrencyInput!): AccountUpdateDisplayCurrencyPayload!
+  bridgeAddExternalAccount: BridgeAddExternalAccountPayload!
+  bridgeCancelWithdrawalRequest(input: BridgeCancelWithdrawalRequestInput!): BridgeCancelWithdrawalRequestPayload!
+  bridgeCreateExternalAccount(input: BridgeCreateExternalAccountInput!): BridgeCreateExternalAccountPayload!
+  bridgeCreateVirtualAccount: BridgeCreateVirtualAccountPayload!
+  bridgeDeleteExternalAccount(input: BridgeDeleteExternalAccountInput!): BridgeDeleteExternalAccountPayload!
+  bridgeInitiateKyc(input: BridgeInitiateKycInput!): BridgeInitiateKycPayload!
+  bridgeInitiateWithdrawal(input: BridgeInitiateWithdrawalInput!): BridgeInitiateWithdrawalPayload!
+  bridgeRequestWithdrawal(input: BridgeRequestWithdrawalInput!): BridgeRequestWithdrawalPayload!
+  bridgeSetDefaultExternalAccount(input: BridgeSetDefaultExternalAccountInput!): BridgeSetDefaultExternalAccountPayload!
+  businessAccountUpgradeRequest(input: BusinessAccountUpgradeRequestInput!): AccountUpgradePayload!
   callbackEndpointAdd(input: CallbackEndpointAddInput!): CallbackEndpointAddPayload!
   callbackEndpointDelete(input: CallbackEndpointDeleteInput!): SuccessPayload!
   captchaCreateChallenge: CaptchaCreateChallengePayload!
   captchaRequestAuthCode(input: CaptchaRequestAuthCodeInput!): SuccessPayload!
   deviceNotificationTokenCreate(input: DeviceNotificationTokenCreateInput!): SuccessPayload!
   feedbackSubmit(input: FeedbackSubmitInput!): SuccessPayload!
+  idDocumentUploadUrlGenerate(input: IdDocumentUploadUrlGenerateInput!): IdDocumentUploadUrlPayload!
 
   """
   Start the Cashout process; 
   User sends USD to Flash via Ibex and receives USD or JMD to bank account.
   """
-  initiateCashout(input: InitiateCashoutInput!): SuccessPayload!
+  initiateCashout(input: InitiateCashoutInput!): InitiatedCashoutResponse!
 
   """
   Actions a payment which is internal to the ledger e.g. it does
@@ -845,6 +1165,12 @@ type Mutation {
   """
   lnUsdInvoiceCreateOnBehalfOfRecipient(input: LnUsdInvoiceCreateOnBehalfOfRecipientInput!): LnInvoicePayload!
   lnUsdInvoiceFeeProbe(input: LnUsdInvoiceFeeProbeInput!): CentAmountPayload!
+
+  """
+  Pay a LNURL-pay endpoint using a USD/USDT wallet balance.
+  The wallet amount is converted to whole-satoshi millisatoshis before calling IBEX.
+  """
+  lnurlPaymentSend(input: LnurlPaymentSendInput!): PaymentSendPayload!
   merchantMapSuggest(input: MerchantMapSuggestInput!): MerchantPayload!
   onChainAddressCreate(input: OnChainAddressCreateInput!): OnChainAddressPayload!
   onChainAddressCurrent(input: OnChainAddressCurrentInput!): OnChainAddressPayload!
@@ -859,6 +1185,7 @@ type Mutation {
   The user can review this offer and then execute the withdrawal by calling the initiateCashout mutation.
   """
   requestCashout(input: RequestCashoutInput!): RequestCashoutResponse!
+  updateExternalWallet(input: UpdateExternalWalletInput!): UpdateExternalWalletPayload!
   userContactUpdateAlias(input: UserContactUpdateAliasInput!): UserContactUpdateAliasPayload! @deprecated(reason: "will be moved to AccountContact")
   userEmailDelete: UserEmailDeletePayload!
   userEmailRegistrationInitiate(input: UserEmailRegistrationInitiateInput!): UserEmailRegistrationInitiatePayload!
@@ -980,7 +1307,7 @@ input OnChainUsdPaymentSendInput {
 }
 
 type OnChainUsdTxFee {
-  amount: CentAmount!
+  amount: FractionalCentAmount!
 }
 
 type OneDayAccountLimit implements AccountLimit {
@@ -1124,23 +1451,32 @@ type PublicWallet {
 
 type Query {
   accountDefaultWallet(username: Username!, walletCurrency: WalletCurrency): PublicWallet!
+  bridgeExternalAccounts: [BridgeExternalAccount]
+  bridgeKycStatus: String
+  bridgeVirtualAccount: BridgeVirtualAccount
+  bridgeWithdrawalRequest(id: ID!): BridgeWithdrawal
+  bridgeWithdrawals: [BridgeWithdrawal]
   btcPrice(currency: DisplayCurrency! = "USD"): Price @deprecated(reason: "Deprecated in favor of realtimePrice")
   btcPriceList(range: PriceGraphRange!): [PricePoint]
   businessMapMarkers: [MapMarker!]!
+  cashWalletCutover: CashWalletCutover!
   currencyList: [Currency!]!
   globals: Globals
   isFlashNpub(input: IsFlashNpubInput!): IsFlashNpubPayload
+  latestAccountUpgradeRequest: AccountUpgradeRequestPayload!
   lnInvoicePaymentStatus(input: LnInvoicePaymentStatusInput!): LnInvoicePaymentStatusPayload!
   me: User
   mobileVersions: [MobileVersions]
   npubByUsername(username: Username!): npubByUsername
   onChainTxFee(address: OnChainAddress!, amount: SatAmount!, speed: PayoutSpeed = FAST, walletId: WalletId!): OnChainTxFee!
-  onChainUsdTxFee(address: OnChainAddress!, amount: CentAmount!, speed: PayoutSpeed = FAST, walletId: WalletId!): OnChainUsdTxFee!
+  onChainUsdTxFee(address: OnChainAddress!, amount: FractionalCentAmount!, speed: PayoutSpeed = FAST, walletId: WalletId!): OnChainUsdTxFee!
   onChainUsdTxFeeAsBtcDenominated(address: OnChainAddress!, amount: SatAmount!, speed: PayoutSpeed = FAST, walletId: WalletId!): OnChainUsdTxFee!
   quizQuestions: [QuizQuestion] @deprecated(reason: "TODO: remove. we don't need a non authenticated version of this query. the users can only do the query while authenticated")
 
   """Returns 1 Sat and 1 Usd Cent price for the given currency"""
   realtimePrice(currency: DisplayCurrency = "USD"): RealtimePrice!
+  supportedBanks: [Bank!]!
+  transactionDetails(input: TransactionDetailsInput!): TransactionDetailsPayload!
   userDefaultWalletId(username: Username!): WalletId! @deprecated(reason: "will be migrated to AccountDefaultWalletId")
   usernameAvailable(username: Username!): Boolean
 }
@@ -1191,6 +1527,9 @@ type RealtimePricePayload {
 input RequestCashoutInput {
   """Amount in USD cents."""
   amount: USDCents!
+
+  """ERPNext bank account identifier to receive the cashout."""
+  bankAccountId: ID!
 
   """ID for a USD wallet belonging to the current user."""
   walletId: WalletId!
@@ -1316,6 +1655,73 @@ type TransactionConnection {
   pageInfo: PageInfo!
 }
 
+type TransactionDetails {
+  """Account ID associated with the transaction"""
+  accountId: String
+
+  """Bitcoin address for onchain transactions"""
+  address: String
+
+  """Transaction amount"""
+  amount: Float
+
+  """Number of confirmations for onchain transactions"""
+  confirmations: Int
+
+  """Transaction creation timestamp"""
+  createdAt: String
+
+  """Transaction currency"""
+  currency: String
+
+  """Transaction fee"""
+  fee: Float
+
+  """Transaction ID"""
+  id: String!
+
+  """Lightning invoice (bolt11)"""
+  invoice: String
+
+  """Transaction memo/description"""
+  memo: String
+
+  """Lightning payment hash"""
+  paymentHash: String
+
+  """Lightning payment preimage"""
+  paymentPreimage: String
+
+  """Transaction status"""
+  status: String
+
+  """Bitcoin transaction ID for onchain transactions"""
+  txid: String
+
+  """Transaction type (lightning/onchain)"""
+  type: String
+
+  """Transaction last update timestamp"""
+  updatedAt: String
+
+  """Output index for onchain transactions"""
+  vout: Int
+}
+
+type TransactionDetailsError {
+  message: String!
+}
+
+input TransactionDetailsInput {
+  """Transaction ID to fetch details for"""
+  transactionId: String!
+}
+
+type TransactionDetailsPayload {
+  errors: [TransactionDetailsError!]!
+  transactionDetails: TransactionDetails
+}
+
 """An edge in a connection."""
 type TransactionEdge {
   """A cursor for use in pagination"""
@@ -1345,6 +1751,15 @@ enum TxStatus {
   SUCCESS
 }
 
+input UpdateExternalWalletInput {
+  lnurlp: Lnurl!
+}
+
+type UpdateExternalWalletPayload {
+  errors: [Error!]!
+  walletId: WalletId
+}
+
 type UpgradePayload {
   authToken: AuthToken
   errors: [Error!]!
@@ -1355,12 +1770,57 @@ type UpgradePayload {
 scalar USDCents
 
 """
+A wallet belonging to an account which contains a USDT balance and a list of transactions.
+"""
+type UsdtWallet implements Wallet {
+  accountId: ID!
+  balance: FractionalCentAmount
+  id: ID!
+  isExternal: Boolean!
+  lnurlp: Lnurl
+
+  """An unconfirmed incoming onchain balance."""
+  pendingIncomingBalance: SignedAmount!
+  transactions(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): TransactionConnection
+  transactionsByAddress(
+    """Returns the items that include this address."""
+    address: OnChainAddress!
+
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): TransactionConnection
+  walletCurrency: WalletCurrency!
+}
+
+"""
 A wallet belonging to an account which contains a USD balance and a list of transactions.
 """
 type UsdWallet implements Wallet {
   accountId: ID!
-  balance: SignedAmount!
+  balance: FractionalCentAmount
   id: ID!
+  isExternal: Boolean!
   lnurlp: Lnurl
 
   """An unconfirmed incoming onchain balance."""
@@ -1398,6 +1858,9 @@ type UsdWallet implements Wallet {
 }
 
 type User {
+  """Bank accounts available for cashout"""
+  bankAccounts: [BankAccount!]!
+
   """
   Get single contact details.
   Can include the transactions associated with the contact.
@@ -1616,8 +2079,9 @@ A generic wallet which stores value in one of our supported currencies.
 """
 interface Wallet {
   accountId: ID!
-  balance: SignedAmount!
+  balance: FractionalCentAmount
   id: ID!
+  isExternal: Boolean!
   lnurlp: Lnurl
   pendingIncomingBalance: SignedAmount!
 
@@ -1665,6 +2129,7 @@ interface Wallet {
 enum WalletCurrency {
   BTC
   USD
+  USDT
 }
 
 """Unique identifier of a wallet"""
