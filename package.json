@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@magidoc/cli": "^6.4.4",
+    "lodash": "^4.18.1",
     "serve": "^14.2.4"
   }
 }
