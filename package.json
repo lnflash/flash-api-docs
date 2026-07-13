@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "fetch-schema": "get-graphql-schema https://api.flashapp.me/graphql > schema.graphql",
     "fetch-schema:beta": "get-graphql-schema https://api.test.flashapp.me/graphql > schema.graphql",
-    "generate": "magidoc generate",
+    "generate": "magidoc generate && node scripts/clean-urls.mjs",
     "preview": "magidoc preview",
-    "build": "npm run fetch-schema && rm -rf public && magidoc generate",
+    "build": "npm run fetch-schema && rm -rf public && npm run generate",
     "start": "serve public",
     "dev": "serve public --cors -l 3000"
   },
