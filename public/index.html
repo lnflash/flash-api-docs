@@ -231,6 +231,31 @@
     ul li, ol li {
       margin-bottom: 0.5rem;
     }
+
+    .scope-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .scope-table th, .scope-table td {
+      text-align: left;
+      padding: 0.6rem 0.9rem;
+      border-bottom: 1px solid #e1e1e1;
+    }
+
+    .scope-table th {
+      background-color: #f5f5f5;
+      color: var(--color-secondary);
+      font-weight: 600;
+    }
+
+    .scope-table td code {
+      background-color: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -254,6 +279,7 @@
       <ul>
         <li><a href="#getting-started">Getting Started</a></li>
         <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#api-keys">API Keys</a></li>
         <li><a href="#query-example">Query Example</a></li>
         <li><a href="#mutation-example">Mutation Example</a></li>
         <li><a href="#error-handling">Error Handling</a></li>
@@ -420,7 +446,89 @@ if (error.message === 'Unauthorized' || error.message === 'Token expired') {
         <li>Implement token refresh logic before expiration</li>
         <li>Validate the token on your server before using it</li>
       </ul>
-      
+
+      <h2 id="api-keys">API Keys</h2>
+      <p>API keys let server-side integrations and third-party developers call the Flash API without a user session — a payment processor accepting Bitcoin, an analytics job reading balances, or a bot creating invoices. Unlike a short-lived login token, a key is long-lived, scoped to specific permissions, and managed by the account owner.</p>
+
+      <p>A key has the format <code>fk_&lt;keyId&gt;_&lt;secret&gt;</code>. Only a hash of the secret is ever stored, so the full key is shown <strong>once</strong> at creation and can never be retrieved again — store it securely.</p>
+
+      <h3>Creating a key</h3>
+      <p>Keys are created from an authenticated user <strong>session</strong> (an API key cannot create or manage keys — this prevents a leaked key from minting more). Call <code>apiKeyCreate</code> with a name, the scopes it needs, and optionally an expiry and a per-key rate limit:</p>
+      <div class="code-sample" data-language="graphql">
+        <pre>mutation {
+  apiKeyCreate(input: {
+    name: "BTCPayServer integration"
+    scopes: [read_user, read_wallet, write_wallet]
+    expiresIn: 7776000        # optional — seconds until expiry (here, 90 days). Omit for no expiry.
+    rateLimitPerMinute: 300   # optional — omit to use the platform default.
+  }) {
+    apiKey {
+      keyId
+      apiKey      # the raw key — returned once, copy it now
+      scopes
+      expiresAt
+    }
+    errors { message }
+  }
+}</pre>
+      </div>
+
+      <h3>Authenticating with a key</h3>
+      <p>Send the key in the <code>X-API-KEY</code> header — not the <code>Authorization</code> header, which carries user session tokens:</p>
+      <div class="code-sample" data-language="bash">
+        <pre>curl -X POST https://api.flashapp.me/graphql \
+  -H 'Content-Type: application/json' \
+  -H "X-API-KEY: fk_&lt;keyId&gt;_&lt;secret&gt;" \
+  -d '{"query":"query { me { defaultAccount { wallets { walletCurrency balance } } } }"}'</pre>
+      </div>
+      <p>An invalid, revoked, or expired key — or one used from a disallowed IP — is rejected with <code>401 Unauthorized</code>.</p>
+
+      <h3>Scopes</h3>
+      <p>Access is <strong>deny-by-default</strong>: a key can only reach the operations covered by the scopes it was granted. Grant the minimum an integration needs.</p>
+      <table class="scope-table">
+        <thead>
+          <tr><th>Scope</th><th>Grants</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>read_user</code></td><td>Read profile and account details</td></tr>
+          <tr><td><code>write_user</code></td><td>Modify profile and account settings</td></tr>
+          <tr><td><code>read_wallet</code></td><td>Read wallet balances and details</td></tr>
+          <tr><td><code>write_wallet</code></td><td>Move funds — send and receive</td></tr>
+          <tr><td><code>read_transactions</code></td><td>Read transaction history</td></tr>
+          <tr><td><code>write_transactions</code></td><td>Create transactions</td></tr>
+          <tr><td><code>admin</code></td><td>Full account access</td></tr>
+        </tbody>
+      </table>
+      <p><code>write_*</code> implies the matching <code>read_*</code>, and <code>admin</code> implies every scope. A request outside a key's scopes is rejected with a GraphQL error naming the missing scope. Sensitive operations — login, two-factor, and API-key management itself — are never available to API keys, only to user sessions.</p>
+
+      <h3>Rate limits</h3>
+      <p>Each key has a requests-per-minute budget (its <code>rateLimitPerMinute</code>, or the platform default). When the budget is exhausted, requests are rejected with a GraphQL error carrying <code>extensions.code = "TOO_MANY_REQUESTS"</code> and a <code>retryAfterSeconds</code> hint — back off for that long before retrying:</p>
+      <div class="code-sample" data-language="json">
+        <pre>{
+  "data": null,
+  "errors": [
+    {
+      "message": "API key rate limit exceeded",
+      "extensions": {
+        "code": "TOO_MANY_REQUESTS",
+        "retryAfterSeconds": 42,
+        "rateLimit": { "limit": 300, "remaining": 0 }
+      }
+    }
+  ]
+}</pre>
+      </div>
+
+      <h3>Managing keys</h3>
+      <p>From a user session (not from a key), you can list, rotate, and revoke:</p>
+      <ul>
+        <li><code>apiKeys</code> — list the account's keys with their scopes, status, last-used and expiry. Never returns secret material.</li>
+        <li><code>apiKeyRotate(input: { id })</code> — issue a fresh secret for a key and retire the old one in a single step. The new raw key is returned once.</li>
+        <li><code>apiKeyRevoke(input: { id })</code> — permanently disable a key; it stops authenticating on the next request.</li>
+      </ul>
+
+      <div class="notice"><strong>Treat an API key like a password.</strong> Grant the narrowest scopes that work, set an expiry and IP allowlist where you can, and rotate or revoke a key immediately if it may have been exposed.</div>
+
       <h2 id="query-example">Query Example</h2>
       <p>Fetch account details and wallet balances (requires a valid auth token):</p>
       <div class="code-sample" data-language="bash">
