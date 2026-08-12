@@ -44,6 +44,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add schema.graphql public/
-          git commit -m "Update API documentation based on schema changes"
+          # public/ is gitignored build output (regenerated on deploy), so
+          # `git add public/` fails with "paths are ignored" and, under
+          # `bash -e`, kills the step. Commit only the tracked schema, and
+          # skip the commit when nothing is staged so an unchanged schema
+          # doesn't error on "nothing to commit".
+          git add schema.graphql
+          git diff --staged --quiet || git commit -m "Update API documentation based on schema changes"
           git push
