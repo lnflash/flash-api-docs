@@ -35,13 +35,9 @@ jobs:
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Generate documentation
-        if: steps.check-changes.outputs.changes_detected == 'true'
-        run: npm run generate-docs
-
       - name: Build site
         if: steps.check-changes.outputs.changes_detected == 'true'
-        run: npm run build
+        run: npm run build  # fetch-schema + magidoc generate + clean-urls
 
       - name: Commit and push changes
         if: steps.check-changes.outputs.changes_detected == 'true'
