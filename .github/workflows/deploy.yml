@@ -117,4 +117,4 @@ jobs:
       - name: Deployment Summary
         run: |
           echo "✅ Flash API Documentation has been successfully deployed to DigitalOcean!"
-          echo "🔗 Live URL: https://flash-api-docs.${GITHUB_REF_NAME/main/flashapp.me}"
+          echo "🔗 Live URL: https://docs.flashapp.me/"
