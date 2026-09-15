@@ -1,6 +1,6 @@
 # Authentication
 
-Flash API uses JSON Web Tokens (JWT) for authentication. Most API operations require authentication to identify the user and determine their permissions.
+The Flash API uses opaque bearer tokens for authentication. Most API operations require authentication to identify the user and determine their permissions.
 
 ## Authentication Process
 

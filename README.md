@@ -1,169 +1,65 @@
 # Flash GraphQL API Documentation
 
-This repository contains a simplified documentation website for Flash's GraphQL API. The documentation is automatically generated from the GraphQL schema.
+Source for [docs.flashapp.me](https://docs.flashapp.me), the reference and
+developer guides for the Flash GraphQL API.
 
-## Features
+The reference (queries, mutations, subscriptions, types) is generated from
+`schema.graphql` with [Magidoc](https://magidoc.js.org/). The guides are
+hand-written Markdown in `guides/`.
 
-- Clean, straightforward landing page with key integration examples
-- Complete API reference generated from GraphQL schema
-- Links to interactive GraphQL explorer
-- Automated schema updates via GitHub Actions
-- Advanced search functionality across API documentation
-- Multi-language code examples with copy-to-clipboard
-- Authentication flow diagram
-- Pagination for better navigation
-- Version selector with support for multiple API versions
-- Version comparison tool showing changes between versions
+## Layout
 
-## Local Development
+| Path | What it is |
+|------|------------|
+| `guides/*.md` | Hand-written guide pages: introduction, getting started, authentication, API keys, examples, error handling |
+| `magidoc.mjs` | Magidoc config: site title, header links, the guide page order, and example values for custom scalars |
+| `schema.graphql` | The production API schema, refreshed by `npm run fetch-schema` |
+| `scripts/clean-urls.mjs` | Post-build step that adds `X/index.html` next to every `X.html` so extensionless URLs resolve on DigitalOcean |
+| `magidoc-static/` | Logo and favicon copied to the site root |
+| `public/` | Build output. Gitignored; regenerated on every build |
+| `.github/workflows/` | `deploy.yml` builds and deploys on push to `main`; `update-docs.yml` refreshes `schema.graphql` daily |
 
-### Prerequisites
+## Local development
 
-- Node.js (v14+)
-- npm or yarn
+Requires Node.js 20 or newer.
 
-### Setup
+```bash
+npm ci
+npm run build     # fetch-schema + magidoc generate + clean-urls
+npm run dev       # serve public/ on http://localhost:3000
+```
 
-1. Clone this repository:
-   ```
-   git clone <repository-url>
-   cd flash-api-docs
-   ```
+`npm run fetch-schema:beta` pulls the schema from the test API instead of
+production.
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+## Editing the guides
 
-3. Build the documentation:
-   ```
-   npm run build
-   ```
+1. Edit the Markdown under `guides/`. Links between guides are relative
+   (`[Authentication](authentication)`), and Magidoc renders them under
+   `/guides/`.
+2. To add a guide, create the file and add it to the `pages` list in
+   `magidoc.mjs`.
+3. Run `npm run build` and open the site locally to check the result.
 
-   To build with versioning support:
-   ```
-   npm run build:versions
-   ```
+The reference pages regenerate from the schema, but the guides and their
+examples do not. When the schema changes, check that the examples still match.
 
-4. Start the local server:
-   ```
-   npm run dev
-   ```
+## Schema updates
 
-The documentation will be available at `http://localhost:3000`.
-
-## Updating the Documentation
-
-### Manual Update
-
-1. Fetch the latest schema and rebuild:
-   ```
-   npm run build
-   ```
-
-### Automated Updates
-
-The documentation is automatically updated daily via GitHub Actions when the API schema changes. See the `.github/workflows/update-docs.yml` file for details.
+`update-docs.yml` runs daily, fetches the production schema, and commits
+`schema.graphql` when it has changed. The next deploy rebuilds the reference
+from it. You can also trigger it from the Actions tab.
 
 ## Deployment
 
-This project uses GitHub Actions to automatically build and deploy the documentation to DigitalOcean App Platform when changes are pushed to the `main` branch.
+Pushing to `main` runs `deploy.yml`, which builds the site and deploys
+`public/` to DigitalOcean App Platform. Setup and required secrets are in
+[DEPLOYMENT.md](DEPLOYMENT.md), [DIGITALOCEAN_SETUP.md](DIGITALOCEAN_SETUP.md),
+and [GITHUB_SECRETS.md](GITHUB_SECRETS.md).
 
-### Automated Deployment Process
+## Security
 
-1. When code is pushed to the `main` branch, a GitHub Actions workflow is triggered
-2. The workflow:
-   - Sets up a Node.js environment
-   - Installs dependencies
-   - Fetches the latest GraphQL schema from the Flash API
-   - Builds the static documentation site
-   - Deploys the built site to DigitalOcean App Platform
-
-For full details on the deployment process, see [DEPLOYMENT.md](DEPLOYMENT.md).
-
-### Manual Deployment
-
-You can also manually trigger the deployment from the GitHub Actions tab in the repository.
-
-### Custom Domain Setup
-
-1. Configure `docs.flashapp.me` in your DigitalOcean App Platform settings
-2. Update DNS records to point to the DigitalOcean App Platform
-3. Enable HTTPS
-
-### DigitalOcean App Platform Configuration
-
-The DigitalOcean App is configured as a static site with:
-- Source: GitHub repository
-- Build Command: Managed by GitHub Actions (see workflow)
-- Output Directory: `public`
-
-## Project Structure
-
-- `src/` - Source files
-  - `index.html` - Custom landing page template
-  - `js/` - JavaScript files
-    - `version-manager.js` - Version selector component
-    - `version-router.js` - Version routing system
-    - `version-comparison.js` - Version comparison tool
-  - `stylesheets/` - CSS files
-    - `version-selector.css` - Styles for version selector
-
-- `public/` - Generated website files
-  - `index.html` - Landing page with integration examples
-  - `spec.html` - Full API reference documentation
-  - `stylesheets/` - Generated CSS
-  - `javascripts/` - Generated JavaScript
-  - `images/` - Logos and icons
-  - `v1.1.0/` - Version 1.1.0 documentation (generated by build:versions)
-  - `beta/` - Beta version documentation (generated by build:versions)
-  - `versions.json` - Version manifest
-
-- `schema.graphql` - The current GraphQL schema definition
-- `schema.v1.1.0.graphql` - Version 1.1.0 GraphQL schema
-- `schema.beta.graphql` - Beta version GraphQL schema
-- `spectaql-config.yml` - Configuration for SpectaQL
-- `build-versions.js` - Script to build versioned documentation
-- `VERSION.md` - Version information and changelog
-
-## Customization
-
-To customize the documentation:
-
-1. Edit the `spectaql-config.yml` file to update metadata and description
-2. Modify the landing page in `src/index.html`
-3. Run `npm run build` to apply changes
-
-### Versioning Customization
-
-To customize version information:
-
-1. Update the `versions` array in `src/js/version-manager.js`
-2. Modify version details in `build-versions.js`
-3. Update `VERSION.md` to reflect changes
-4. Run `npm run build:versions` to rebuild with versioning support
-
-## Search Functionality
-
-The documentation includes a powerful search feature that allows developers to quickly find specific types, queries, mutations, and fields within the API reference.
-
-### How It Works
-
-1. The search functionality indexes all headings and descriptions in the documentation when the page loads
-2. As users type in the search box, results are filtered in real-time
-3. Results show the matched content with type information
-4. Clicking a result scrolls directly to that section of the documentation
-5. The selected section is highlighted briefly to make it easy to locate
-
-### Implementation Details
-
-The search is built with vanilla JavaScript and consists of several components:
-
-- **search-loader.js**: Ensures the search is properly initialized
-- **search.js**: Core search implementation with indexing and result filtering
-- **search.css**: Styling for the search interface
-
-The implementation uses debouncing to prevent excessive searching while typing, and includes highlighting of search results for better visibility.
+See [SECURITY.md](SECURITY.md) for how to report a vulnerability.
 
 ## License
 
