@@ -38,7 +38,7 @@ Send the key in the `X-API-KEY` header — not the `Authorization` header, which
 carries user session tokens:
 
 ```bash
-curl -X POST https://api.flashapp.me/graphql \
+curl -X POST https://api.test.flashapp.me/graphql \
   -H 'Content-Type: application/json' \
   -H "X-API-KEY: fk_<keyId>_<secret>" \
   -d '{"query":"query { me { defaultAccount { wallets { walletCurrency balance } } } }"}'

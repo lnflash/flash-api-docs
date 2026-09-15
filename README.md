@@ -21,16 +21,21 @@ hand-written Markdown in `guides/`.
 
 ## Local development
 
-Requires Node.js 20 or newer.
+Requires Node.js 20 or newer (`@magidoc/cli` declares `node >=20`; `package.json` has no `engines` field of its own).
+
+For day-to-day work, fetch the schema from TEST and generate:
 
 ```bash
 npm ci
-npm run build     # fetch-schema + magidoc generate + clean-urls
-npm run dev       # serve public/ on http://localhost:3000
+npm run fetch-schema:beta   # introspects https://api.test.flashapp.me/graphql into schema.graphql
+npm run generate            # magidoc generate + clean-urls, writes public/
+npm run dev                 # serve public/ on http://localhost:3000
 ```
 
-`npm run fetch-schema:beta` pulls the schema from the test API instead of
-production.
+`npm run build` is what CI runs. It calls `npm run fetch-schema`, which
+introspects the **production** API (`https://api.flashapp.me/graphql`), then
+deletes and regenerates `public/`. Use it only when you mean to publish the
+production schema.
 
 ## Editing the guides
 

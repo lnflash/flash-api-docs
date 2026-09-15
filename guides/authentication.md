@@ -1,63 +1,108 @@
 # Authentication
 
-The Flash API uses opaque bearer tokens for authentication. Most API operations require authentication to identify the user and determine their permissions.
+The Flash API authenticates a user with a one-time code sent to their phone and returns an opaque session token. Send that token as a bearer token on every request.
 
-## Authentication Process
+Use `https://api.test.flashapp.me/graphql` while you develop. The examples below target TEST.
 
-Flash uses a two-step phone verification process for authentication:
+## Login flow
 
-1. **Step 1: Initiate phone verification** by sending a `userPhoneRegistrationInitiate` mutation with the phone number:
+Login is three mutations. The first two request the code; the third exchanges it for a token.
 
-   ```graphql
-   mutation {
-     userPhoneRegistrationInitiate(input: { phone: "+1234567890" }) {
-       success
-       errors {
-         message
-       }
-     }
-   }
-   ```
+### 1. Create a captcha challenge
 
-   This will trigger a 6-digit code to be sent via SMS to the specified phone number.
+```graphql
+mutation {
+  captchaCreateChallenge {
+    errors { message }
+    result { id challengeCode newCaptcha failbackMode }
+  }
+}
+```
 
-2. **Step 2: Verify the code and obtain auth token** by sending a `userLogin` mutation with the phone number and verification code:
+Keep `challengeCode`. `failbackMode` tells you how to fill in the next step.
 
-   ```graphql
-   mutation {
-     userLogin(input: { phone: "+1234567890", code: "123456" }) {
-       authToken
-       errors {
-         message
-       }
-     }
-   }
-   ```
+### 2. Request the code
 
-   Upon successful verification, an authentication token will be returned.
+```graphql
+mutation RequestCode($input: CaptchaRequestAuthCodeInput!) {
+  captchaRequestAuthCode(input: $input) {
+    success
+    errors { message }
+  }
+}
+```
 
-3. **Store the auth token** securely in your application.
+```json
+{
+  "input": {
+    "phone": "+18765550100",
+    "channel": "SMS",
+    "challengeCode": "<challengeCode from step 1>",
+    "validationCode": "<see below>",
+    "secCode": "<see below>"
+  }
+}
+```
 
-   The token is valid for 7 days. For security reasons, do not store it in localStorage in browser environments.
+`channel` is `SMS` or `WHATSAPP`.
 
-4. **Include the token** in all subsequent API requests via the Authorization header:
+The captcha is Geetest. How you fill `validationCode` and `secCode` depends on `failbackMode` from step 1:
 
-   ```http
-   Authorization: Bearer YOUR_AUTH_TOKEN
-   ```
+- `failbackMode: true` (the captcha service is unavailable, which is the state TEST is normally in): the server only checks that both values are non-empty. Passing the `challengeCode` for `validationCode` and `<challengeCode>|jordan` for `secCode` works; that is what the Flash API key console does.
+- `failbackMode: false`: you must run the Geetest widget in a browser with the returned `id` and `challengeCode`, and pass the `validate` and `seccode` values it produces. A script cannot get past this on its own.
 
-5. **Handle token expiration** by implementing appropriate error handling:
+A successful call returns `success: true` and the code is sent. There is no separate registration step: a phone number that has never logged in gets an account on step 3.
 
-   ```javascript
-   // Check for authentication errors
-   if (error.message === 'Unauthorized' || error.message === 'Token expired') {
-     // Repeat the authentication process to get a new token
-   }
-   ```
+### 3. Exchange the code for a token
 
-## Security Best Practices
+```graphql
+mutation Login($input: UserLoginInput!) {
+  userLogin(input: $input) {
+    authToken
+    totpRequired
+    errors { message }
+  }
+}
+```
 
-- Never expose your auth token in client-side code or URLs
-- Use HTTPS for all API communication
-- Implement token refresh logic before expiration
-- Validate the token on your server before using it
+```json
+{ "input": { "phone": "+18765550100", "code": "123456" } }
+```
+
+`authToken` is an opaque bearer token (it starts with `ory_st_`). It is not a JWT; there is nothing to decode.
+
+If `totpRequired` is `true`, the account has two-factor authentication enabled and the token is not usable yet. Complete it with a plain HTTP POST to the auth endpoint of the same environment:
+
+```http
+POST https://api.test.flashapp.me/auth/totp/validate
+Content-Type: application/json
+
+{ "totpCode": "123456", "authToken": "<authToken from userLogin>" }
+```
+
+A `200` upgrades the session; then use `authToken` as normal. A wrong code returns `401 {"error":"invalid code"}`.
+
+### 4. Use the token
+
+```http
+Authorization: Bearer <authToken>
+```
+
+## Session lifetime
+
+Sessions are managed by Ory Kratos. The configured lifespan is 9360 hours (a little over a year) in both TEST and PROD, and the session is not extended by use. Plan to re-run the login flow when you get a 401; do not hard-code the lifespan.
+
+## What failure looks like
+
+| Situation | Response |
+|-----------|----------|
+| Missing or expired token, or an invalid one | HTTP `401` from the gateway with an HTML body, not GraphQL JSON. Your client must handle a non-JSON 401. |
+| No token on a query that needs one | HTTP `200` with `data.me: null` and a top-level error `"Not authorized"` |
+| Wrong login code | `userLogin` returns `errors: [{ "message": "Invalid or incorrect code entered." }]` |
+| Code requested without steps 1 and 2 | `userLogin` fails (`UnknownPhoneProviderServiceError`) because no code was issued |
+
+## Security notes
+
+- Never expose a session token in client-side code, URLs, or logs.
+- Use HTTPS for all API communication.
+- For server-to-server integrations, create an [API key](api-keys) from the session instead of storing the session token.
