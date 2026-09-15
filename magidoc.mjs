@@ -30,7 +30,7 @@ export default {
         'og:description': 'Flash GraphQL API reference and developer guides.',
       },
       externalLinks: [
-        { label: 'Interactive Explorer', href: 'https://api.test.flashapp.me/graphql', kind: 'External', position: 'header' },
+        { label: 'TEST endpoint', href: 'https://api.test.flashapp.me/graphql', kind: 'External', position: 'header' },
         { label: 'Flash Website', href: 'https://getflash.io', kind: 'External', position: 'header' },
       ],
       pages: [

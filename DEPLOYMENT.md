@@ -8,13 +8,14 @@ The Flash API Documentation is automatically built and deployed to DigitalOcean 
 
 ## How It Works
 
-1. When code is pushed to the `main` branch, a GitHub Actions workflow is triggered
-2. The workflow:
-   - Sets up a Node.js environment
-   - Installs dependencies
-   - Fetches the latest GraphQL schema from the Flash API
-   - Builds the static documentation site
-   - Deploys the built site to DigitalOcean App Platform
+1. When code is pushed to the `main` branch, `.github/workflows/deploy.yml` runs.
+2. The **build** job installs dependencies and runs `npm run build`, which fetches the **production** schema and generates the site. This build is a check: the job uploads `public/` as a workflow artifact and nothing downloads it into the deploy.
+3. The **deploy** job installs `doctl`, verifies the token, and runs `doctl apps create-deployment <app id>`. That tells DigitalOcean App Platform to rebuild and publish the site itself, from the GitHub repository and the app's own build settings. The artifact from step 2 is not what gets served.
+4. The workflow's final "Live URL" line prints `https://flash-api-docs.flashapp.me`; the real host is `https://docs.flashapp.me`. That line is cosmetic and wrong.
+
+### Daily schema refresh
+
+`.github/workflows/update-docs.yml` runs at 00:00 UTC, fetches the production schema, and commits `schema.graphql` when it changed. It pushes with the default `GITHUB_TOKEN`, and pushes made with that token do not trigger other workflows, so `deploy.yml` does **not** run for those commits. The refreshed schema reaches the site only if the DigitalOcean app deploys on push, or if someone runs `deploy.yml` from the Actions tab.
 
 ## Prerequisites
 
@@ -29,13 +30,9 @@ For detailed instructions on setting up these secrets correctly, see [DIGITALOCE
 
 1. Create a new App on DigitalOcean App Platform
 2. Select "Static Site" as the resource type
-3. Configure the app with the following settings:
-   - Source: GitHub
-   - Repository: Your Flash API Docs repository
-   - Branch: main
-   - Build Command: npm run build
-   - Output Directory: public
-   - Environment: Static Site
+3. Configure the app as a Static Site from the GitHub repository, branch `main`. Because `public/` is gitignored, the app must build the site itself: build command `npm run build`, output directory `public`.
+
+   **The live app's actual settings (build command, source and output directories, deploy-on-push) are not recorded in this repository.** The committed `.do/app.yaml` is a template with a placeholder repository and no build command, and `DIGITALOCEAN_SETUP.md` previously gave different values from this file. Before changing anything, read the real spec with `doctl apps spec get <app id>` and treat that as the source of truth.
 
 ## Manual Deployment
 

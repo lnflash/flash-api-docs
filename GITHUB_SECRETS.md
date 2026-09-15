@@ -15,7 +15,7 @@ For the deployment workflow to function properly, you need to add the following 
 2. Go to **API** in the left sidebar (or navigate to https://cloud.digitalocean.com/account/api/tokens)
 3. Click **Generate New Token**
 4. Enter a name for your token (e.g., "Flash API Docs Deployment")
-5. Select **Write** scope to allow the token to create deployments
+5. Select both **Read** and **Write** scopes; `deploy.yml` runs `doctl account get` and `doctl apps list` (read) before `doctl apps create-deployment` (write)
 6. Click **Generate Token**
 7. Copy the token immediately (you won't be able to view it again)
 

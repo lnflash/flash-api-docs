@@ -33,7 +33,9 @@ Do not assume every account has the same wallets:
 - Accounts created since June 2024 have no server-side BTC wallet. The app's Bitcoin wallet runs on the device (Breez SDK) and may appear here as an external wallet whose `balance` is `null`.
 - New accounts currently get `USD` and `USDT` wallets with `USDT` as the default. Older accounts, including the TEST fixture account, may have only `USD`.
 
-Always read `wallets`, pick the one you want by `walletCurrency`, and use its `id`. `balance` is in the wallet's minor unit: cents for `USD` and `USDT`.
+Always read `wallets`, pick the one you want by `walletCurrency`, and use its `id`.
+
+`balance` on `USD` and `USDT` wallets is in fractional US cents (a number that may carry a fraction of a cent). On the app's external BTC wallet it is `null`. If an account still has an older server-side BTC wallet object, check what its `balance` returns rather than assuming either rule. This note is about the `balance` field only; other Bitcoin-denominated amounts in the API (invoice amounts, fees) are in satoshis as their types say.
 
 You can fetch the current BTC price without authentication:
 

@@ -1,30 +1,80 @@
 # Error Handling
 
-The API returns errors in the following format:
+Errors reach you through three different channels. Check all three.
+
+## 1. The gateway: HTTP 401 with an HTML body
+
+A missing, invalid, expired, or revoked bearer token or API key is rejected
+before it reaches GraphQL. The response is HTTP `401 Authorization Required`
+with an HTML page from the gateway, not JSON:
+
+```
+HTTP/1.1 401 Authorization Required
+<html><head><title>401 Authorization Required</title></head>...
+```
+
+Your client must handle a non-JSON 401. Re-run the login flow or check the
+key.
+
+## 2. Top-level GraphQL errors
+
+Requests that are syntactically wrong, ask for fields that do not exist, or
+call an operation without the required authentication come back in the
+standard `errors` array:
 
 ```json
 {
-  "data": { ... },
+  "data": { "me": null },
   "errors": [
     {
-      "message": "Error message",
-      "locations": [{ "line": 2, "column": 3 }],
-      "path": ["fieldName"]
+      "message": "Not authorized",
+      "locations": [{ "line": 1, "column": 3 }],
+      "path": ["me"],
+      "extensions": { "service": "public" }
     }
   ]
 }
 ```
 
-`message` is human-readable. Some errors also carry a machine-readable code in
-`extensions.code`.
+Notes, all observed on TEST:
 
-## Codes to handle
+- A query for an unknown field is HTTP `400` with `extensions.code =
+  "GRAPHQL_VALIDATION_FAILED"`.
+- An API key over its per-minute budget is HTTP `200` with
+  `extensions.code = "TOO_MANY_REQUESTS"` and `extensions.retryAfterSeconds`.
+  See [API Keys](api-keys).
+- Other top-level errors currently carry only `message` and
+  `extensions.service`; the backend's error codes are not forwarded at this
+  level today. Match on `message` ("Not authorized", "Not authenticated")
+  until that changes.
 
-| Situation | What you get |
-|-----------|--------------|
-| Invalid, revoked, or expired API key | HTTP `401 Unauthorized` |
-| API key over its per-minute budget | HTTP 200 with a GraphQL error, `extensions.code = "TOO_MANY_REQUESTS"` and `extensions.retryAfterSeconds`; the `Retry-After` header is also set |
-| Mutation-level failure (bad input, insufficient balance, and so on) | HTTP 200 with the mutation's `errors` array populated and its payload field null |
+## 3. Errors inside a mutation payload
 
-Always check both the top-level `errors` array and the `errors` field inside a
-mutation payload.
+Most business failures are not top-level errors at all. The request is HTTP
+`200`, the mutation's payload field is `null`, and its `errors` list is
+populated. Every payload error implements the same interface:
+
+```graphql
+interface Error {
+  code: String
+  message: String!
+  path: [String]
+}
+```
+
+For example, `lnInvoiceCreate` on a wallet that is not a BTC wallet:
+
+```json
+{
+  "data": {
+    "lnInvoiceCreate": {
+      "errors": [{ "message": "Flash does not support BTC wallets." }],
+      "invoice": null
+    }
+  }
+}
+```
+
+Ask for `errors { code message path }` on every mutation and check the list
+before reading the payload. Codes such as `INVALID_INPUT`, `TOO_MANY_REQUEST`,
+and the `BRIDGE_*` family appear here.

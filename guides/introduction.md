@@ -34,5 +34,5 @@ Most operations require authentication. There are two ways to authenticate:
 - An **API key** — a long-lived, scoped credential for server-to-server
   integrations (see [API Keys](api-keys)). Best for automation.
 
-You can explore the API interactively at the
-[testing endpoint](https://api.test.flashapp.me/graphql).
+The endpoints accept POST requests only; there is no browser playground. Use
+`curl` or any GraphQL client against the testing endpoint.

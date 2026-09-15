@@ -12,8 +12,9 @@ This guide explains how to set up DigitalOcean App Platform and the necessary to
      - Source: GitHub
      - Repository: Your Flash API Docs repository
      - Branch: main
-     - Source Directory: `/public` (Important: This should point to the built static files)
+     - Build Command: `npm run build`, Output Directory: `public` (`public/` is gitignored, so the app has to build it; a source directory of `/public` alone would serve nothing)
      - Environment: Static Site
+   - The live app's real settings are not stored in this repository; check them with `doctl apps spec get <app id>` before relying on this list. See [DEPLOYMENT.md](DEPLOYMENT.md).
 
 2. **Note Your App ID**:
    - After creating your app, the App ID is visible in the URL when viewing your app
