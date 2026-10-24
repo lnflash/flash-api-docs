@@ -59,4 +59,4 @@ Response:
 }
 ```
 
-Use the test environment (`api.test.flashapp.me`) while developing — see the full API reference for every available query, mutation, and subscription.
+Use the test environment (`api.test.flashapp.me`) while developing. See the full API reference for every available query, mutation, and subscription.
