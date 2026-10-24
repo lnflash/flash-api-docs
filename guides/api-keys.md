@@ -1,14 +1,14 @@
 # API Keys
 
 API keys let server-side integrations and third-party developers call the Flash
-API without a user session — a payment processor accepting Bitcoin, an analytics
+API without a user session: a payment processor accepting Bitcoin, an analytics
 job reading balances, or a bot creating invoices. Unlike a short-lived login
 token, a key is long-lived, scoped to specific permissions, and managed by the
 account owner.
 
 A key has the format `fk_<keyId>_<secret>`. Only a hash of the secret is ever
 stored, so the full key is shown **once** at creation and can never be retrieved
-again — store it securely.
+again. Store it securely.
 
 ## Creating a key
 
@@ -30,11 +30,11 @@ mutation {
 }
 ```
 
-The `apiKey` field is the raw key — copy it now.
+The `apiKey` field is the raw key. Copy it now.
 
 ## Authenticating with a key
 
-Send the key in the `X-API-KEY` header — not the `Authorization` header, which
+Send the key in the `X-API-KEY` header, instead of the `Authorization` header, which
 carries user session tokens:
 
 ```bash
@@ -56,13 +56,13 @@ its scopes. Grant the minimum an integration needs.
 | `read_user` | Read profile and account details |
 | `write_user` | Modify profile and account settings |
 | `read_wallet` | Read wallet balances and details |
-| `write_wallet` | Move funds — send and receive |
+| `write_wallet` | Move funds (send and receive) |
 | `read_transactions` | Read transaction history |
 | `write_transactions` | Create transactions |
 | `admin` | Full account access |
 
 `write_*` implies the matching `read_*`, and `admin` implies every scope.
-Sensitive operations — login, two-factor, and API-key management itself — are
+Sensitive operations, login, two-factor, and API-key management itself, are
 never available to API keys, only to user sessions.
 
 ## Rate limits
