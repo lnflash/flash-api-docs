@@ -8,7 +8,9 @@ Sign up for a Flash personal account at [getflash.io](https://getflash.io).
 
 ### 2. Obtain API Credentials
 
-Authentication requires a two-step process: first trigger a verification code to be sent to the user's phone with `userPhoneRegistrationInitiate`, then submit the code with `userLogin` to receive an authentication token. See the Authentication section below for detailed examples.
+For a server-side integration, create an API key in the API Key Console at [console.flashapp.me](https://console.flashapp.me) and send it in the `X-API-KEY` header. See [API Keys](api-keys). For the test environment, ask Flash for a test API key.
+
+Apps that sign users in themselves use the phone-code flow in [Authentication](authentication): `captchaCreateChallenge`, then `captchaRequestAuthCode`, then `userLogin`, which returns an authentication token.
 
 ### 3. Set Up Your Environment
 
@@ -30,8 +32,11 @@ const endpoint = 'https://api.test.flashapp.me/graphql';
 
 const graphQLClient = new GraphQLClient(endpoint);
 
-// After authentication, set the auth token
-graphQLClient.setHeader('Authorization', 'Bearer YOUR_AUTH_TOKEN');
+// With an API key
+graphQLClient.setHeader('X-API-KEY', 'fk_YOUR_KEY');
+
+// Or, after a user signs in, with their auth token
+// graphQLClient.setHeader('Authorization', 'Bearer YOUR_AUTH_TOKEN');
 ```
 
 ### 5. Make Your First Request

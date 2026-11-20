@@ -12,6 +12,12 @@ again. Store it securely.
 
 ## Creating a key
 
+The simplest way is the API Key Console at
+[console.flashapp.me](https://console.flashapp.me): sign in with your Flash phone
+number, then create, rotate and revoke keys there. Test accounts issued by Flash
+use [console.test.flashapp.me](https://console.test.flashapp.me).
+
+To create keys from code, sign in first (see [Authentication](authentication)).
 Keys are created from an authenticated user **session** (an API key cannot
 create or manage keys). Call `apiKeyCreate` with a name, the scopes it needs,
 and optionally an expiry and a per-key rate limit:
